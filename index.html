@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>8akeryy — 꿈을 굽는 베이커리</title>
+<meta name="description" content="꿈을 디저트로 구워주는 강아지가 운영하는 베이커리, 8akeryy" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+</head>
+<body>
+
+<header class="nav">
+  <a class="logo" href="index.html"><span class="paw">🐾</span>8akeryy</a>
+  <button class="nav-toggle" aria-label="메뉴 열기">☰</button>
+  <nav class="menu">
+    <a href="index.html" class="active">홈</a>
+    <a href="about.html">브랜드 소개</a>
+    <a href="project.html">프로젝트</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="treat" data-speed="1.8" style="top:18%;left:14%;">🍰</div>
+    <div class="treat" data-speed="2.4" style="top:24%;right:16%;">🧁</div>
+    <div class="treat" data-speed="1.4" style="bottom:26%;left:20%;">🍮</div>
+    <div class="treat" data-speed="2.0" style="bottom:30%;right:18%;">🍪</div>
+    <div class="treat" data-speed="1.2" style="top:44%;left:50%;">✨</div>
+
+    <!-- 캐릭터 자리: 추후 민희방 렌더 이미지로 교체 (아래 SVG를 <img>로 바꾸면 됩니다) -->
+    <div class="mascot" aria-label="8akeryy 강아지 마스코트">
+      <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="120" cy="212" rx="62" ry="12" fill="#000" opacity="0.06"/>
+        <ellipse cx="64" cy="96" rx="26" ry="40" fill="#C98C63"/>
+        <ellipse cx="176" cy="96" rx="26" ry="40" fill="#C98C63"/>
+        <circle cx="120" cy="118" r="74" fill="#E8B98C"/>
+        <path d="M70 70 q-20 -2 -16 -22 q2 -16 20 -14 q6 -22 30 -20 q14 -16 32 -4 q22 -6 26 16 q18 2 12 22 q-4 14 -20 12 z" fill="#fff"/>
+        <rect x="68" y="64" width="104" height="16" rx="8" fill="#fff"/>
+        <ellipse cx="120" cy="140" rx="40" ry="32" fill="#FCEBD7"/>
+        <circle cx="98" cy="116" r="8" fill="#5A3D2B"/>
+        <circle cx="142" cy="116" r="8" fill="#5A3D2B"/>
+        <circle cx="100" cy="113" r="2.6" fill="#fff"/>
+        <circle cx="144" cy="113" r="2.6" fill="#fff"/>
+        <circle cx="80" cy="134" r="9" fill="#FFB3B3" opacity=".7"/>
+        <circle cx="160" cy="134" r="9" fill="#FFB3B3" opacity=".7"/>
+        <ellipse cx="120" cy="134" rx="8" ry="6" fill="#5A3D2B"/>
+        <path d="M104 150 q16 16 32 0" stroke="#5A3D2B" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <h1>꿈을 굽는<br><span class="accent">베이커리</span></h1>
+    <p>오늘 밤 당신의 꿈을, 작고 따뜻한 디저트로 구워드려요.<br>강아지 민희방이 운영하는 작은 가게, 8akeryy에 오신 걸 환영해요.</p>
+
+    <div class="scrollcue"><span>SCROLL</span><div class="dot"></div></div>
+  </section>
+
+  <!-- NAV CARDS → sub pages -->
+  <section class="navcards">
+    <div class="wrap grid">
+      <a class="navcard reveal" href="about.html">
+        <div class="ico">🐶</div>
+        <h3>브랜드 소개</h3>
+        <p>현실과 꿈의 경계에 있는 작은 가게, 그리고 안내자 민희방. 8akeryy의 세계관과 마음을 만나보세요.</p>
+        <span class="go">자세히 보기 →</span>
+      </a>
+      <a class="navcard reveal" href="project.html">
+        <div class="ico">🎀</div>
+        <h3>프로젝트 소개</h3>
+        <p>「기다릴게, 네 이름을」 — 오래 기다린 아이들과 보내는 하루. 2026년 8월의 캠페인 팝업 이야기.</p>
+        <span class="go">자세히 보기 →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- SHOP teaser -->
+  <section class="cta" id="shop">
+    <div class="wrap reveal">
+      <div class="eyebrow">Coming soon</div>
+      <h2>곧, 꿈을 담은<br><span class="accent">굿즈</span>가 찾아와요</h2>
+      <p>수익의 일부는 유기견 단체에 기부됩니다.<br>지금은 인스타그램에서 8akeryy의 이야기를 먼저 만나보세요.</p>
+      <a class="btn" href="https://instagram.com" target="_blank" rel="noopener">인스타그램 보러가기</a>
+    </div>
+    <footer id="contact">
+      <div class="fl">🐾 8akeryy</div>
+      <div>YARR Studio · 8akeryy</div>
+      <div style="margin-top:6px;opacity:.8;">협업 및 문의 · yarr0128@gmail.com</div>
+    </footer>
+  </section>
+
+</main>
+
+<script src="main.js"></script>
+</body>
+</html>
