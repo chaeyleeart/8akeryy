@@ -17,29 +17,44 @@
 
 <header class="nav">
   <a class="logo" href="index.html">8akeryy</a>
-  <button class="nav-toggle" aria-label="메뉴 열기">☰</button>
   <nav class="menu">
     <a href="index.html" class="active">홈</a>
     <a href="about.html">브랜드 소개</a>
     <a href="project.html">프로젝트</a>
+    <a href="gallery.html">아카이브</a>
   </nav>
+  <a class="nav-cta" href="mailto:yarr0128@gmail.com">문의하기</a>
+  <button class="nav-toggle" aria-label="메뉴 열기">☰</button>
 </header>
 
 <main>
 
   <!-- HERO -->
   <section class="hero">
-    <div class="eyebrow">Dream Bakery · since 8akeryy</div>
-
-    <!-- 메인 캐릭터: 민희방 (배경 제거 렌더) -->
-    <div class="mascot" aria-label="8akeryy 안내자 민희방">
-      <img src="characters/minhebang_sitting.png" alt="8akeryy 안내자 민희방" />
+    <div class="hero-left">
+      <div class="eyebrow">Dream Bakery · since 8akeryy</div>
+      <h1>
+        <span class="ln"><span>꿈을 굽는</span></span>
+        <span class="ln"><span class="accent">베이커리</span></span>
+      </h1>
+      <p>잠든 마음과 오랜 기다림을 디저트로 구워내는 작은 가게. 안내자 민희방이 당신을 조용히 맞이합니다.</p>
     </div>
 
-    <h1>꿈을 굽는 <span class="accent">베이커리</span></h1>
-    <p>잠든 마음과 오랜 기다림을 디저트로 구워내는 작은 가게.<br>안내자 민희방이 당신을 조용히 맞이합니다.</p>
+    <div class="hero-right">
+      <div class="hero-stage">
+        <div class="backdrop"></div>
+        <div class="ring"></div>
+        <div class="ring r2"></div>
+        <div class="spin" id="heroSpin" aria-label="민희방 360도 회전">
+          <img src="characters/spin0.png" alt="8akeryy 안내자 민희방" class="on" />
+          <img src="characters/spin1.png" alt="" />
+          <img src="characters/spin2.png" alt="" />
+          <img src="characters/spin3.png" alt="" />
+        </div>
+      </div>
+    </div>
 
-    <div class="scrollcue"><span>Scroll</span><div class="line"></div></div>
+    <div class="scrollcue"><div class="line"></div><span>Scroll</span></div>
   </section>
 
   <!-- NAV CARDS → sub pages -->
