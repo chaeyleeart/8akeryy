@@ -28,9 +28,7 @@
 
   // ---- HERO (main page) ----
   if (document.querySelector('.hero')) {
-    gsap.from('.hero-left .eyebrow', { y: 16, opacity: 0, duration: .8, delay: .1, ease: 'power3.out' });
-    gsap.from('.hero p', { y: 20, opacity: 0, duration: .9, delay: .7, ease: 'power3.out' });
-    gsap.from('.hero-right', { opacity: 0, scale: .92, duration: 1.1, delay: .35, ease: 'power3.out' });
+    // entrance animations are handled in CSS (robust); JS only drives the turntable.
 
     // right-side motion graphic: character turntable (frame cycle)
     var spin = document.getElementById('heroSpin');

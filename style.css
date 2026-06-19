@@ -66,6 +66,11 @@ section{position:relative;}
 .hero h1 .ln:nth-child(1) > span{animation-delay:.15s;}
 .hero h1 .ln:nth-child(2) > span{animation-delay:.32s;}
 @keyframes lnUp{to{transform:translateY(0);}}
+.hero-left .eyebrow{animation:heroFadeUp .8s ease both .1s;}
+.hero p{animation:heroFadeUp .9s ease both .55s;}
+.hero-right{animation:heroFadeIn 1s ease both .3s;}
+@keyframes heroFadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+@keyframes heroFadeIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:none;}}
 .hero p{margin-top:32px;font-size:clamp(14px,1.5vw,17px);color:var(--ink-soft);max-width:430px;line-height:1.95;font-weight:300;}
 @media(max-width:880px){.hero p{margin-left:auto;margin-right:auto;}}
 
