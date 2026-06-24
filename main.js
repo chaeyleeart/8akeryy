@@ -20,9 +20,9 @@
 
   // ---- Reveal on scroll (any .reveal element) ----
   gsap.utils.toArray('.reveal').forEach((el) => {
-    gsap.to(el, {
-      opacity: 1, y: 0, duration: 1, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 84%' }
+    gsap.from(el, {
+      opacity: 0, y: 36, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 86%' }
     });
   });
 
