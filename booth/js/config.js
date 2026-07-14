@@ -6,25 +6,25 @@
    ============================================================ */
 window.BOOTH_CONFIG = {
   /* ---- 모드 ---- */
-  // true  : 백엔드 없이 목업 이미지로 전체 플로우 동작 (현재)
-  // false : /api/transform 서버리스 함수 호출 (NB2 연동 후)
-  MOCK_MODE: true,
+  // true  : 백엔드 없이 목업 이미지로 전체 플로우 동작
+  // false : /api/transform 서버리스 함수 호출 (NB2 실연동) ← 현재
+  MOCK_MODE: false,
 
   /* ---- 목업 ---- */
-  MOCK_RESULT_IMAGE: 'assets/mock_apply.jpg', // 최종 합성 목표 이미지(웹용 리사이즈)
-  MOCK_DELAY_MS: 4200,                        // 실제 변환 소요시간 시뮬레이션
+  MOCK_RESULT_IMAGE: 'assets/mock_apply.jpg',
+  MOCK_DELAY_MS: 4200,
 
   /* ---- 실서비스 엔드포인트 (Vercel 서버리스) ---- */
   API_TRANSFORM: '/api/transform',
 
   /* ---- 촬영 ---- */
   CAPTURE_WIDTH: 1024,     // 서버로 보낼 사진 가로 px (4:5 크롭)
-  CAPTURE_ASPECT: 4 / 5,   // 세로형 결과물과 동일 비율
+  CAPTURE_ASPECT: 4 / 5,
   COUNTDOWN_SEC: 3,
   JPEG_QUALITY: 0.9,
 
   /* ---- 키오스크 ---- */
-  RESULT_IDLE_RESET_SEC: 90,  // 결과 화면 방치 시 자동으로 처음 화면 복귀
+  RESULT_IDLE_RESET_SEC: 90,
 
   /* ---- 처리 중 화면 문구 ---- */
   PROC_MESSAGES: [
