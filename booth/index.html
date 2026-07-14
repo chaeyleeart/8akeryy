@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<title>8akeryy AI Photobooth</title>
+<meta name="description" content="8akeryy 캐릭터 화풍 AI 포토부스 — 강아지들 사이에 폭 파묻힌 나를 만나보세요" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="booth.css" />
+<!-- 라이브러리는 로컬 번들 (부스 현장 네트워크 이슈 대비, CDN 무의존)
+     gsap-lite는 GSAP API 호환 — 실제 GSAP으로 바꾸려면 아래 한 줄만 CDN으로 교체 -->
+<script src="vendor/gsap-lite.js"></script>
+<script src="vendor/qrcode-lite.js"></script>
+</head>
+<body>
+
+<!-- 상단 브랜드 바 (키오스크 공통) -->
+<header class="booth-top">
+  <img src="assets/mainlogo.png" alt="8akeryy" class="booth-logo" />
+  <span class="booth-top-label">AI Photobooth</span>
+</header>
+
+<main class="booth" id="booth">
+
+  <!-- ════════ SCREEN 1 : 시작/안내 ════════ -->
+  <section class="screen screen-start is-active" id="screen-start" data-screen="start">
+    <div class="start-inner">
+      <div class="eyebrow">8akeryy · AI Photobooth</div>
+      <h1 class="start-title">
+        <span class="ln"><span>강아지들 사이에</span></span>
+        <span class="ln"><span><em class="accent">폭,</em> 파묻혀 볼까요?</span></span>
+      </h1>
+      <p class="start-desc">
+        사진을 찍으면 8akeryy 화풍의 치비 캐릭터로 변신!<br />
+        몽글몽글 강아지들 틈에 쏙 들어간 나를 만나보세요.
+      </p>
+
+      <div class="start-preview">
+        <figure class="prev-card prev-before">
+          <div class="prev-ph"><span class="prev-emoji">📷</span></div>
+          <figcaption>내 사진</figcaption>
+        </figure>
+        <div class="prev-arrow">→</div>
+        <figure class="prev-card prev-after">
+          <img src="assets/mock_apply.jpg" alt="변환 예시 — 강아지들 사이의 치비 캐릭터" />
+          <figcaption>8akeryy 화풍</figcaption>
+        </figure>
+      </div>
+
+      <button class="btn-big fill" id="btnStart">촬영 시작하기</button>
+      <p class="start-hint">약 30초면 충분해요 · 완성 사진은 QR로 바로 저장</p>
+    </div>
+  </section>
+
+  <!-- ════════ SCREEN 2 : 동의 (UI만, 로직 stub) ════════ -->
+  <section class="screen screen-consent" id="screen-consent" data-screen="consent">
+    <div class="panel">
+      <div class="eyebrow">Step 1 · 동의</div>
+      <h2>촬영 전에<br />확인해 주세요</h2>
+
+      <label class="consent-item" for="ckRequired">
+        <input type="checkbox" id="ckRequired" />
+        <span class="ck-box" aria-hidden="true"></span>
+        <span class="ck-text">
+          <strong>촬영 및 AI 변환 동의 <em class="req">필수</em></strong>
+          촬영된 사진은 AI 변환에만 사용되며, 변환 즉시 원본은 저장하지 않아요.
+        </span>
+      </label>
+
+      <label class="consent-item" for="ckOptional">
+        <input type="checkbox" id="ckOptional" />
+        <span class="ck-box" aria-hidden="true"></span>
+        <span class="ck-text">
+          <strong>웹/SNS 게시 동의 <em class="opt">선택</em></strong>
+          완성된 캐릭터 이미지를 8akeryy 웹사이트·SNS에 소개할 수 있어요.
+        </span>
+      </label>
+
+      <div class="panel-actions">
+        <button class="btn-big ghost" data-goto="start">← 처음으로</button>
+        <button class="btn-big fill" id="btnConsent" disabled>동의하고 촬영하기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ SCREEN 3 : 카메라 ════════ -->
+  <section class="screen screen-camera" id="screen-camera" data-screen="camera">
+    <div class="cam-wrap">
+      <div class="eyebrow">Step 2 · 촬영</div>
+      <h2 class="cam-title" id="camTitle">프레임 안에 서 주세요</h2>
+
+      <div class="cam-stage" id="camStage">
+        <video id="camVideo" autoplay playsinline muted></video>
+        <canvas id="camCanvas" hidden></canvas>
+        <img id="camShot" alt="촬영된 사진" hidden />
+        <div class="cam-frame" aria-hidden="true"></div>
+        <div class="cam-count" id="camCount" hidden><span>3</span></div>
+        <div class="cam-flash" id="camFlash" aria-hidden="true"></div>
+        <div class="cam-error" id="camError" hidden>
+          <p>카메라를 열 수 없어요 😢<br /><small>Safari 설정에서 카메라 권한을 확인해 주세요.<br />(카메라는 HTTPS 접속에서만 동작해요)</small></p>
+          <button class="btn-big ghost" id="btnCamRetry">다시 시도</button>
+        </div>
+      </div>
+
+      <!-- 촬영 전 컨트롤 -->
+      <div class="cam-controls" id="camControlsLive">
+        <button class="btn-big ghost" data-goto="consent">← 이전</button>
+        <button class="btn-shutter" id="btnShutter" aria-label="촬영">
+          <span class="shutter-ring"></span><span class="shutter-dot"></span>
+        </button>
+        <span class="cam-controls-spacer"></span>
+      </div>
+
+      <!-- 촬영 후 컨트롤 (재촬영/사용) -->
+      <div class="cam-controls" id="camControlsReview" hidden>
+        <button class="btn-big ghost" id="btnRetake">↺ 다시 찍기</button>
+        <button class="btn-big fill" id="btnUsePhoto">이 사진으로 변신! →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ SCREEN 4 : 처리 중 ════════ -->
+  <section class="screen screen-processing" id="screen-processing" data-screen="processing">
+    <div class="proc-inner">
+      <div class="oven-box" aria-hidden="true">
+        <div class="oven-glow"></div>
+        <div class="oven-dogs">
+          <span class="dog d1">🐶</span><span class="dog d2">🐕</span><span class="dog d3">🐩</span>
+        </div>
+        <div class="paw-loader">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <h2 class="proc-title">몽글몽글 굽는 중...</h2>
+      <p class="proc-msg" id="procMsg">얼굴 특징을 살펴보고 있어요</p>
+      <div class="proc-bar"><div class="proc-bar-fill" id="procBar"></div></div>
+    </div>
+  </section>
+
+  <!-- ════════ SCREEN 5 : 결과 + QR ════════ -->
+  <section class="screen screen-result" id="screen-result" data-screen="result">
+    <div class="result-inner">
+      <div class="eyebrow">완성!</div>
+      <h2 class="result-title">강아지들 사이,<br /><em class="accent">오늘의 나</em>를 구웠어요</h2>
+
+      <div class="result-body">
+        <figure class="result-card" id="resultCard">
+          <img id="resultImg" alt="변환 결과 이미지" />
+        </figure>
+        <aside class="result-side">
+          <div class="qr-card">
+            <div class="qr-box" id="qrBox"></div>
+            <p class="qr-label">QR을 찍으면<br /><strong>내 폰으로 저장</strong>돼요</p>
+          </div>
+          <button class="btn-big fill" id="btnAgain">다시 하기 ↺</button>
+          <p class="result-timer" id="resultTimer" hidden></p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="booth-foot">
+  <div class="stripe stripe-band"></div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/consent.js"></script>
+<script src="js/pipeline.js"></script>
+<script src="booth.js"></script>
+</body>
+</html>

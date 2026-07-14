@@ -1,0 +1,11 @@
+{
+  "name": "8akeryy-booth",
+  "version": "0.1.0",
+  "private": true,
+  "description": "8akeryy AI Photobooth — iPad kiosk webapp (booth.8akeryy.com)",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {}
+}
