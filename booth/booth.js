@@ -200,14 +200,20 @@
   function showResult({ imageUrl, shareUrl }) {
     resultImg.src = imageUrl;
 
-    // QR 생성 (다운로드용 공개 URL 인코딩)
+    // QR 생성 (다운로드용 공개 URL 인코딩) — shareUrl 없으면 QR 카드 숨김
     qrBox.innerHTML = '';
-    new QRCode(qrBox, {
-      text: shareUrl,
-      width: 150, height: 150,
-      colorDark: '#3E3216', colorLight: '#FFFFFF',
-      correctLevel: QRCode.CorrectLevel.M,
-    });
+    const qrCard = document.querySelector('.qr-card');
+    if (shareUrl) {
+      qrCard.hidden = false;
+      new QRCode(qrBox, {
+        text: shareUrl,
+        width: 150, height: 150,
+        colorDark: '#3E3216', colorLight: '#FFFFFF',
+        correctLevel: QRCode.CorrectLevel.M,
+      });
+    } else {
+      qrCard.hidden = true;
+    }
 
     show('result');
     gsap.fromTo('#resultCard', { scale: .9, opacity: 0 }, { scale: 1, opacity: 1, duration: .8, ease: 'back.out(1.4)', delay: .15 });
