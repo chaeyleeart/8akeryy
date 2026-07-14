@@ -3,8 +3,9 @@
    프롬프트를 다듬을 때는 이 파일만 수정하면 됨. 클라이언트 노출 금지.
    ============================================================ */
 
-/** 사용할 모델 — Google Nano Banana 2 */
-export const MODEL_ID = 'gemini-3.1-flash-image';
+/** 사용할 모델 — Google Nano Banana 2 Lite (비용 절감: 장당 ~$0.034)
+ *  품질을 높이고 싶으면 'gemini-3.1-flash-image' (장당 ~$0.067)로 교체 */
+export const MODEL_ID = 'gemini-3.1-flash-lite-image';
 
 /** 고정 의상 */
 export const FIXED_OUTFIT = 'a cozy cream-colored knit sweater';
