@@ -83,7 +83,6 @@
     <div class="gal-modal-body">
       <div class="gal-modal-cat" id="mCat"></div>
       <h3 id="mTitle"></h3>
-      <div class="gal-modal-date" id="mDate"></div>
       <p id="mBody"></p>
     </div>
   </div>
@@ -105,7 +104,7 @@
         var card = document.createElement('button');
         card.className = 'gal-card';
         card.innerHTML = '<div class="gal-thumb ' + (p.fit === 'contain' ? 'is-contain' : '') + '"><img src="' + p.image + '" alt="' + p.title + '" loading="lazy"/></div>' +
-          '<div class="gal-meta"><span class="gal-cat">' + p.category + '</span><h4>' + p.title + '</h4><span class="gal-date">' + p.date + '</span></div>';
+          '<div class="gal-meta"><span class="gal-cat">' + p.category + '</span><h4>' + p.title + '</h4></div>';
         card.addEventListener('click', function () { openModal(p); });
         grid.appendChild(card);
       });
@@ -125,7 +124,6 @@
       document.getElementById('mImg').className = (p.fit === 'contain' ? 'is-contain' : '');
       document.getElementById('mCat').textContent = p.category;
       document.getElementById('mTitle').textContent = p.title;
-      document.getElementById('mDate').textContent = p.date;
       document.getElementById('mBody').innerHTML = (p.body || '').replace(/\n/g, '<br>');
       modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false');
     }
@@ -149,18 +147,15 @@
         var imgs = (data.images || []).slice(0, 60); // 최신 60장
         if (!imgs.length) { empty.style.display = 'block'; return; }
         imgs.forEach(function (it, i) {
-          var d = new Date(it.uploadedAt);
-          var dateStr = d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0');
           var card = document.createElement('button');
           card.className = 'gal-card';
           card.innerHTML = '<div class="gal-thumb"><img src="' + it.url + '" alt="포토부스 결과물" loading="lazy"/></div>' +
-            '<div class="gal-meta"><span class="gal-cat">Photo Booth</span><h4>오늘의 손님 #' + (imgs.length - i) + '</h4><span class="gal-date">' + dateStr + '</span></div>';
+            '<div class="gal-meta"><span class="gal-cat">Photo Booth</span><h4>오늘의 손님 #' + (imgs.length - i) + '</h4></div>';
           card.addEventListener('click', function () {
             document.getElementById('mImg').src = it.url;
             document.getElementById('mImg').className = '';
             document.getElementById('mCat').textContent = 'Photo Booth';
             document.getElementById('mTitle').textContent = '강아지들 사이, 오늘의 손님';
-            document.getElementById('mDate').textContent = dateStr;
             document.getElementById('mBody').innerHTML = '8akeryy AI 포토부스에서 태어난 치비 캐릭터. 게시에 동의해 주신 분의 결과물입니다.';
             modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false');
           });

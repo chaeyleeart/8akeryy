@@ -239,14 +239,14 @@ footer a{color:var(--ink-soft);} footer a:hover{color:var(--ink);}
             border:1px solid var(--line);background:transparent;border-radius:999px;padding:8px 18px;cursor:pointer;transition:all .25s;}
 .gal-filter:hover{color:var(--ink);}
 .gal-filter.on{background:var(--pink);border-color:var(--pink);color:var(--ink);font-weight:700;}
-.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.gal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
 @media(max-width:880px){.gal-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:520px){.gal-grid{grid-template-columns:1fr;}}
 .gal-card{display:block;text-align:left;background:none;border:none;padding:0;cursor:pointer;font-family:inherit;}
 .gal-thumb{border:1px solid var(--line);border-radius:16px;overflow:hidden;aspect-ratio:4/5;background:var(--card);
            display:flex;align-items:center;justify-content:center;transition:transform .4s,box-shadow .4s;}
 .gal-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;}
-.gal-thumb.is-contain{background:var(--cream);}
+.gal-thumb.is-contain{background:#FFFFFF;}
 .gal-thumb.is-contain img{object-fit:contain;padding:14% 12% 0;}
 .gal-card:hover .gal-thumb{transform:translateY(-4px);box-shadow:0 20px 30px -20px var(--shadow);}
 .gal-card:hover .gal-thumb img{transform:scale(1.03);}
@@ -259,7 +259,7 @@ footer a{color:var(--ink-soft);} footer a:hover{color:var(--ink);}
 .gal-modal-bg{position:absolute;inset:0;background:rgba(62,50,22,.45);backdrop-filter:blur(4px);}
 .gal-modal-card{position:relative;z-index:1;background:var(--bg);border-radius:20px;overflow:hidden;max-width:860px;width:100%;max-height:88vh;display:grid;grid-template-columns:1.1fr 1fr;box-shadow:0 40px 80px -30px rgba(62,50,22,.4);}
 @media(max-width:680px){.gal-modal-card{grid-template-columns:1fr;max-height:90vh;overflow-y:auto;}}
-.gal-modal-media{background:var(--cream);display:flex;align-items:center;justify-content:center;min-height:280px;}
+.gal-modal-media{background:#FFFFFF;display:flex;align-items:center;justify-content:center;min-height:280px;}
 .gal-modal-media img{width:100%;height:100%;object-fit:cover;}
 .gal-modal-media img.is-contain{object-fit:contain;padding:10%;}
 .gal-modal-body{padding:clamp(28px,4vw,44px);display:flex;flex-direction:column;justify-content:center;}

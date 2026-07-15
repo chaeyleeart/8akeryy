@@ -5,21 +5,20 @@
    - image    : 대표 이미지 경로 (characters/ 또는 posts/ 폴더 등)
    - fit      : "contain"(투명 캐릭터·로고) 또는 "cover"(꽉 찬 일러스트) — 생략 시 cover
    - body     : 상세보기에 들어갈 본문 (줄바꿈은 \n)
+   ※ 업로드 날짜는 사이트에 노출하지 않습니다.
    ============================================================ */
 window.POSTS = [
   {
     id: "minhebang-intro",
-    title: "민희방, 꿈을 굽는 안내자",
-    date: "2026.06.10",
+    title: "민희방(minhebbang)",
     category: "Artwork",
-    image: "characters/minhebang_sitting.png",
+    image: "characters/minhebang_front.png",
     fit: "contain",
     body: "8akeryy의 작은 가게를 지키는 안내자 민희방.\n말이 많진 않지만 곁에 있으면 마음이 차분해지는 존재예요. 오늘도 누군가의 잠든 마음을 디저트로 구워내며, 조용히 손님을 기다립니다."
   },
   {
     id: "dali-artwork",
-    title: "달이 — 씩씩한 첫인사",
-    date: "2026.06.08",
+    title: "달이(dali)",
     category: "Artwork",
     image: "characters/ddal_front.png",
     fit: "contain",
@@ -27,8 +26,7 @@ window.POSTS = [
   },
   {
     id: "kong-artwork",
-    title: "콩 — 가장 온화한 오후",
-    date: "2026.06.05",
+    title: "콩(kong)",
     category: "Artwork",
     image: "characters/grey_front.png",
     fit: "contain",
@@ -36,8 +34,7 @@ window.POSTS = [
   },
   {
     id: "byeol-artwork",
-    title: "별이 — 천천히 다가오는 마음",
-    date: "2026.06.03",
+    title: "별이(byeol)",
     category: "Artwork",
     image: "characters/brown_front.png",
     fit: "contain",
@@ -46,7 +43,6 @@ window.POSTS = [
   {
     id: "project-behind",
     title: "「기다릴게, 네 이름을」 — 기획 비하인드",
-    date: "2026.05.28",
     category: "Behind",
     image: "characters/minhebang_front.png",
     fit: "contain",
@@ -55,7 +51,6 @@ window.POSTS = [
   {
     id: "8akeryy-world",
     title: "현실과 꿈의 경계에 있는 가게",
-    date: "2026.05.20",
     category: "News",
     image: "characters/minhebang_sitting.png",
     fit: "contain",
