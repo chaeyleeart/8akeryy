@@ -4,8 +4,13 @@
    입력(JSON): { photo: "data:image/jpeg;base64,....", consent?: {...} }
    출력(JSON): { imageUrl, shareUrl }
      - imageUrl : 결과 화면 <img>용 (data URL — 항상 반환)
-     - shareUrl : QR로 인코딩할 공개 URL (Vercel Blob 설정 시)
-   환경변수: GEMINI_API_KEY (필수), BLOB_READ_WRITE_TOKEN (선택, QR용)
+     - shareUrl : QR로 인코딩할 공개 URL (Vercel Blob)
+   저장 정책:
+     - SNS/웹 게시 동의(consent.snsPublish=true) → booth/results/archive/
+     - 미동의                                → booth/results/private/
+     → Vercel 대시보드 Manage Blobs에서 archive/ 폴더만 보면
+       홈페이지 아카이빙 후보를 바로 골라낼 수 있음
+   환경변수: GEMINI_API_KEY (필수), BLOB_READ_WRITE_TOKEN (QR용)
    ============================================================ */
 import {
   MODEL_ID, PROMPT_COMPOSITE, OUTPUT_ASPECT, OUTPUT_MIME,
@@ -40,9 +45,12 @@ export default async function handler(req, res) {
 
     const dataUrl = `data:${OUTPUT_MIME};base64,${resultB64}`;
 
+    // ── Blob 업로드: 게시 동의 여부에 따라 폴더 분리 ──────────
     let shareUrl = '';
     if (process.env.BLOB_READ_WRITE_TOKEN) {
-      try { shareUrl = await uploadToBlob(Buffer.from(resultB64, 'base64')); }
+      const consent = body.consent || {};
+      const folder = consent.snsPublish === true ? 'booth/results/archive' : 'booth/results/private';
+      try { shareUrl = await uploadToBlob(Buffer.from(resultB64, 'base64'), folder); }
       catch (e) { console.error('[blob]', e.message); }
     }
 
@@ -126,8 +134,8 @@ function findImageB64(obj) {
 }
 
 /* ---------------- Vercel Blob 업로드 ---------------- */
-async function uploadToBlob(buffer) {
-  const name = `booth/results/${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+async function uploadToBlob(buffer, folder) {
+  const name = `${folder}/${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}.jpg`;
   const r = await fetch(`https://blob.vercel-storage.com/${name}`, {
     method: 'PUT',
     headers: {
