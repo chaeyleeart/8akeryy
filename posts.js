@@ -42,7 +42,7 @@ window.POSTS = [
   },
   {
     id: "project-behind",
-    title: "「기다릴게, 네 이름을」 — 기획 비하인드",
+    title: "「기다릴게, 이름을」 — 기획 비하인드",
     category: "Behind",
     image: "characters/minhebang_front.png",
     fit: "contain",
