@@ -118,6 +118,7 @@ html,body{height:100%;background:#000;font-family:"Pretendard",sans-serif;color:
     <video id="m-door"  class="media" src="assets/v2_door.mp4"  muted playsinline preload="auto"></video>
     <video id="m-idle"  class="media" src="assets/v4_idle.mp4"  muted playsinline preload="auto" loop></video>
     <video id="m-think" class="media" src="assets/v5_think.mp4" muted playsinline preload="auto"></video>
+    <audio id="bgm" src="assets/bgm.mp3" loop preload="auto"></audio>
     <div id="glow"></div>
 
     <!-- 어트랙트 -->
@@ -236,7 +237,17 @@ function toAttract(){
   hide($("glow")); hide($("caption")); $("answers").innerHTML="";
   switchMedia("attract");
 }
-$("attract-ui").addEventListener("click", ()=>{ if(busy) return; busy=true; playDoor(); });
+$("attract-ui").addEventListener("click", ()=>{ if(busy) return; busy=true; startBgm(); playDoor(); });
+
+const bgm=$("bgm");
+let bgmStarted=false;
+function startBgm(){
+  if(bgmStarted) return;
+  bgm.volume=0; bgm.play().then(()=>{
+    bgmStarted=true;
+    let vv=0; const iv=setInterval(()=>{ vv+=0.02; bgm.volume=Math.min(vv,0.3); if(vv>=0.3) clearInterval(iv); },200);
+  }).catch(()=>{});
+}
 
 /* ---------- S2 문 열림 → 글로우 → S3 인사 ---------- */
 function playDoor(){
