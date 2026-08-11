@@ -49,6 +49,38 @@
     </div>
   </section>
 
+
+  <!-- Origin Film -->
+  <section class="block" id="originFilm">
+    <div class="wrap">
+      <div class="reveal" style="text-align:center;max-width:640px;margin:0 auto 40px;">
+        <div class="eyebrow">Origin Film</div>
+        <h2>구름 위 베이커리에서 온 장면들</h2>
+        <p style="margin-top:14px;color:var(--ink-soft);font-size:15px;">「기다릴게, 이름을」 오리진 필름 중에서</p>
+      </div>
+      <div class="film-grid">
+        <figure class="film-cell reveal" style="grid-column:span 12;"><video src="film/f01_clouds.mp4" autoplay muted loop playsinline></video><figcaption>구름 너머, 어딘가</figcaption></figure>
+        <figure class="film-cell reveal" style="grid-column:span 6;"><img src="film/f02_arch.jpg" alt="" loading="lazy"/><figcaption>무지개 다리를 건너면</figcaption></figure>
+        <figure class="film-cell reveal" style="grid-column:span 6;"><img src="film/f03_bakery_ext.jpg" alt="" loading="lazy"/><figcaption>골목 끝, 8akeryy</figcaption></figure>
+        <figure class="film-cell reveal" style="grid-column:span 12;"><video src="film/f04_baking.mp4" autoplay muted loop playsinline></video><figcaption>방이는 오늘도 반죽을 칩니다</figcaption></figure>
+        <figure class="film-cell reveal" style="grid-column:span 7;"><img src="film/f05_cake.jpg" alt="" loading="lazy"/><figcaption>누군가를 위한 케이크</figcaption></figure>
+        <figure class="film-cell reveal" style="grid-column:span 5;"><img src="film/f06_letter.jpg" alt="" loading="lazy"/><figcaption>가게로 도착한 편지 한 장</figcaption></figure>
+        <figure class="film-cell reveal" style="grid-column:span 5;"><img src="film/f08_delayed.jpg" alt="" loading="lazy"/><figcaption>기다림은 자꾸 길어지고</figcaption></figure>
+        <figure class="film-cell reveal" style="grid-column:span 7;"><img src="film/f09_landing.jpg" alt="" loading="lazy"/><figcaption>그래도, 도착</figcaption></figure>
+        <figure class="film-cell reveal" style="grid-column:span 12;"><video src="film/f11_meet.mp4" autoplay muted loop playsinline></video><figcaption>처음 만난 날</figcaption></figure>
+        <figure class="film-cell reveal" style="grid-column:span 6;"><img src="film/f10_dal.jpg" alt="" loading="lazy"/><figcaption>이름을 기다리는 아이</figcaption></figure>
+        <figure class="film-cell reveal" style="grid-column:span 6;"><img src="film/f12_ending.jpg" alt="" loading="lazy"/><figcaption>기다릴게, 이름을</figcaption></figure>
+      </div>
+    </div>
+  </section>
+  <style>
+  .film-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;}
+  .film-cell{position:relative;margin:0;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px var(--shadow);background:var(--cream);}
+  .film-cell img,.film-cell video{width:100%;height:100%;object-fit:cover;display:block;}
+  .film-cell figcaption{position:absolute;left:0;right:0;bottom:0;padding:26px 18px 14px;background:linear-gradient(transparent,rgba(62,50,22,.55));color:#fff;font-size:13.5px;font-weight:600;letter-spacing:-.01em;}
+  @media(max-width:720px){.film-cell{grid-column:span 12 !important;}}
+  </style>
+
   <!-- 세 아이 -->
   <section class="block">
     <div class="wrap">
