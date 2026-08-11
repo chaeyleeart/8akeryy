@@ -48,6 +48,42 @@
     <div class="scrollcue"><div class="line"></div><span>Scroll</span></div>
   </section>
 
+  <!-- Exhibition -->
+  <section class="block" id="exhibition">
+    <div class="wrap">
+      <div class="ex-card reveal">
+        <div class="ex-media"><img src="film/f03_bakery_ext.jpg" alt="베이커리 외관" loading="lazy"/></div>
+        <div class="ex-body">
+          <div class="eyebrow">Exhibition</div>
+          <h2>무지개 다리 앞,<br>작은 베이커리</h2>
+          <p class="ex-lead">이름 한 줄 없이 떠난 아이들에게, 행복한 하루를 선물하는 전시. 8akeryy의 아이들이 홍릉에서 기다리고 있어요.</p>
+          <ul class="ex-info">
+            <li><b>한국콘텐츠진흥원 NCA 쇼케이스</b></li>
+            <li>2026. 8. 19 (수) — 8. 21 (금) · 10:00–17:00</li>
+            <li>홍릉 콘텐츠인재캠퍼스</li>
+          </ul>
+          <ol class="ex-steps">
+            <li>설문으로 만난 나의 아이, NFC 키링 받기</li>
+            <li>게임 라운지에서 그 아이와 ‘하루’ 보내기</li>
+            <li>AI 애니메이션 「기다릴게, 이름을」 관람</li>
+            <li>AI 포토부스에서 오늘의 기억 남기기</li>
+            <li>나가는 길, 오늘의 이야기를 편지로</li>
+          </ol>
+          <a class="btn fill" href="matching/">오늘의 친구 미리 만나기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <style>
+  .ex-card{display:grid;grid-template-columns:1fr 1.1fr;gap:0;background:#fff;border:1px solid var(--line);border-radius:26px;overflow:hidden;box-shadow:0 14px 40px var(--shadow);}
+  .ex-media img{width:100%;height:100%;object-fit:cover;display:block;}
+  .ex-body{padding:clamp(26px,4vw,48px);}
+  .ex-lead{margin:16px 0 20px;color:var(--ink-soft);font-size:15.5px;line-height:1.7;}
+  .ex-info{list-style:none;margin:0 0 20px;padding:16px 18px;background:var(--cream);border-radius:14px;font-size:14.5px;line-height:1.9;}
+  .ex-steps{margin:0 0 26px;padding-left:20px;font-size:14.5px;line-height:2.0;color:var(--ink);}
+  @media(max-width:820px){.ex-card{grid-template-columns:1fr;}.ex-media img{max-height:260px;}}
+  </style>
+
   <!-- BRAND 한 줄 -->
   <section class="block">
     <div class="wrap narrow" style="text-align:center;">
