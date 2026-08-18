@@ -1,14 +1,18 @@
 /* ============================================================
-   8akeryy AI Photobooth — 서버 전용 고정 상수 (프롬프트 v3)
+   8akeryy AI Photobooth — 서버 전용 고정 상수 (프롬프트 v4)
    ------------------------------------------------------------
-   v3 개선: 개인 얼굴 특징 반영 강화 (캐리커처 원칙)
-   — 귀여움은 렌더링 스타일에서, 얼굴은 방문자 그대로 —
-   v2: 성별 반영 / 옷색 반영 니트 / 배경 무시 / 강아지 가림 금지
+   v4 개선: 스타일 일관성 + 합성 품질
+   — 모델 Lite → 표준 (gemini-3.1-flash-image, 장당 ~$0.067)
+   — STYLE LOCK: IMAGE 3의 soft 3D 렌더 스타일 강제, 2D/스티커 금지
+   — 레이어링 강화: 흰 강아지가 캐릭터 앞을 반드시 가림 + 접촉 그림자
+   v3: 개인 얼굴 특징 반영 강화 (캐리커처 원칙)
+   v2: 성별 반영 / 옷색 반영 니트 / 배경 무시 / 강아지가 가림 금지
    ============================================================ */
 
-/** 사용할 모델 — Google Nano Banana 2 Lite (장당 ~$0.034)
- *  얼굴 유사도가 더 필요하면 'gemini-3.1-flash-image' (장당 ~$0.067)로 교체 */
-export const MODEL_ID = 'gemini-3.1-flash-lite-image';
+/** 사용할 모델 — Google Nano Banana 2 (장당 ~$0.067)
+ *  비용 절감이 필요하면 'gemini-3.1-flash-lite-image' (~$0.034)로 되돌릴 수 있으나
+ *  스타일 일관성·레이어링·손 개수 문제가 재발할 수 있음 (v3 운영에서 확인됨) */
+export const MODEL_ID = 'gemini-3.1-flash-image';
 
 /** 의상 규칙 */
 export const OUTFIT_RULE = 'a cozy knit sweater whose color and tone follow the visitor\'s actual clothing; cream if not visible';
@@ -17,7 +21,7 @@ export const OUTFIT_RULE = 'a cozy knit sweater whose color and tone follow the 
 export const FIXED_POSE = 'sitting snugly, front-facing, relaxed, only visible from the chest up';
 
 /**
- * 단일 호출 합성 프롬프트 (v3).
+ * 단일 호출 합성 프롬프트 (v4).
  * 이미지 순서: [1] 관람객 사진 [2] 배경 프리셋(강아지만) [3] 구도/화풍 예시
  */
 export const PROMPT_COMPOSITE = `
@@ -25,9 +29,14 @@ You are creating a PERSONALIZED CARICATURE for a photo booth — someone who kno
 
 IMAGE 1 is a photo of the real visitor. It is the ONLY source of the character's identity. Completely IGNORE the background, furniture, walls and the visitor's pose in IMAGE 1.
 IMAGE 2 is the fixed background scene: four fluffy puppies on grass. It must stay EXACTLY as it is — same puppies, same positions, same lighting, same grass.
-IMAGE 3 shows ONLY the composition, placement, scale and rendering style. Its character is a generic placeholder — copying its face, hairstyle or gender is a FAILURE.
+IMAGE 3 defines the RENDERING STYLE, composition, placement and scale. Copy its STYLE exactly. Its character's identity (face, hairstyle, gender) is a generic placeholder — copying the identity is a FAILURE, but abandoning its rendering style is ALSO a failure.
 
 TASK: Recreate IMAGE 2 with a chibi caricature of the visitor placed in the same spot and scale as the placeholder in IMAGE 3.
+
+STYLE LOCK (non-negotiable):
+- The character MUST be rendered in the exact same style as the character in IMAGE 3: a soft-3D chibi figurine — volumetric, softly shaded skin, glossy reflective eyes, rosy cheeks, fine 3D hair strands. Think collectible vinyl figure, NOT a drawing.
+- NEVER output flat 2D cartoon, sticker, emoji, line-art, cel-shaded, anime-illustration or clip-art styles. If the character looks like a flat sticker pasted onto a photo, the result is a FAILURE.
+- The character is lit by the SAME warm golden-hour light as IMAGE 2, from the same direction, with soft contact shadows where the character meets the puppies and grass. The character must look like it was photographed IN the scene, not composited onto it.
 
 STEP 1 — STUDY THE FACE (most important):
 Before drawing, carefully observe what makes the visitor's face THEIRS:
@@ -49,10 +58,11 @@ STEP 2 — DRAW THE CHIBI:
 - If several people appear in IMAGE 1, use only the largest, most central person.
 - OUTFIT: a cozy knit sweater following the color/tone of the visitor's actual clothing (dark clothes → dark knit; not visible → cream).
 - POSE (fixed): sitting snugly, front-facing, relaxed, visible only from the chest up.
-- STRICT ANATOMY: exactly one head and exactly two arms with one hand each. No extra, duplicated or merged limbs.
+- STRICT ANATOMY: exactly one head, exactly two arms, at most two hands visible. Before finishing, COUNT the limbs — any extra, duplicated or merged arm/hand is a FAILURE.
 
-LAYERING (critical):
-- The character sits BETWEEN the puppies: brown and cream puppies BEHIND, the white fluffy puppy IN FRONT overlapping the character's lower body.
+LAYERING (critical — the character is BURIED among the puppies, not floating on top):
+- Depth order, back to front: grass → brown puppy and cream puppy (BEHIND the character) → the character → the white fluffy puppy (IN FRONT, clearly OVERLAPPING and covering part of the character's chest and arms).
+- Puppy fur slightly overlaps the character's shoulders and arms, so the character looks snugly wedged in, with soft shadows in the crevices.
 - The character must NOT cover any puppy's face. All four puppies' faces stay fully visible, exactly as in IMAGE 2.
 - Character size: same or smaller than the placeholder in IMAGE 3.
 
