@@ -26,10 +26,10 @@ window.BoothPipeline = (function () {
     const photoDataUrl = await blobToDataUrl(photoBlob);
     if (onProgress) onProgress(0.15);
 
-    // 변환 소요(10~30초) 동안 진행바를 부드럽게 진행
+    // 변환 소요(표준 모델 기준 40~60초) 동안 진행바를 부드럽게 진행
     let fake = 0.15;
     const ticker = setInterval(() => {
-      fake = Math.min(0.9, fake + 0.03);
+      fake = Math.min(0.93, fake + 0.013);
       if (onProgress) onProgress(fake);
     }, 900);
 
