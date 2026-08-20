@@ -320,7 +320,9 @@ function think(){
 function showResult(){
   switchMedia("idle");
   $("overlay").style.display="none";
-  const d=DOGS[pickWinner()];
+  let w=pickWinner();
+  if(w==="kong") w="byul"; else if(w==="byul") w="kong";
+  const d=DOGS[w];
   $("r-img").src=d.img; $("r-img").alt=d.name;
   $("r-name").textContent=d.name;
   $("r-tag").textContent=d.tag;
