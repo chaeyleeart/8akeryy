@@ -65,12 +65,14 @@ export default async function handler(req, res) {
   }
 }
 
-/* ---------------- Gemini 호출 ---------------- */
+/* ---------------- Gemini 호출 ----------------
+   2026-08-21 레이싱 전략: 혼잡 시간대에 같은 호출이 10초~207초로 복불복이라
+   저지연 generateContent 2발 + Interactions 1발을 동시에 쏘고
+   가장 먼저 이미지가 나온 쪽을 사용한다 (비용 최대 3배, 대기시간 최소화) */
 async function generateImage({ prompt, images }) {
   const key = process.env.GEMINI_API_KEY;
 
-  // 1차: generateContent + 저지연 옵션 (thinking minimal, 1K, 4:5)
-  try {
+  const fastCall = (tag) => (async () => {
     const t0 = Date.now();
     const r = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:generateContent`,
@@ -92,41 +94,51 @@ async function generateImage({ prompt, images }) {
         }),
       }
     );
-    if (r.ok) {
-      const j = await r.json();
-      const img = findImageB64(j);
-      if (img) {
-        console.log('[gemini:fast]', Math.round((Date.now() - t0) / 1000) + 's');
-        return img;
-      }
-      console.error('[gemini:fast] no image in response', JSON.stringify(j).slice(0, 500));
-    } else {
-      console.error('[gemini:fast]', r.status, (await r.text()).slice(0, 500));
-      if (r.status === 401 || r.status === 403 || r.status === 429) {
-        throw new Error(`Gemini API ${r.status} — API 키/할당량/결제 상태를 확인하세요`);
-      }
+    if (!r.ok) {
+      const txt = (await r.text()).slice(0, 300);
+      console.error(`[gemini:${tag}]`, r.status, txt);
+      throw new Error(`${r.status} ${txt}`);
     }
-  } catch (e) {
-    if (String(e.message).startsWith('Gemini API')) throw e;
-    console.error('[gemini:fast] failed, falling back', e.message);
-  }
+    const img = findImageB64(await r.json());
+    if (!img) throw new Error('no image');
+    console.log(`[gemini:${tag}] won in`, Math.round((Date.now() - t0) / 1000) + 's');
+    return img;
+  })();
 
-  // 2차: Interactions API (기존 검증된 경로)
-  const r2 = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
-    method: 'POST',
-    headers: { 'x-goog-api-key': key, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: MODEL_ID,
-      input: [
-        { type: 'text', text: prompt },
-        ...images.map(im => ({ type: 'image', mime_type: im.mime_type, data: im.data })),
-      ],
-      response_format: { type: 'image', mime_type: OUTPUT_MIME, aspect_ratio: OUTPUT_ASPECT },
-    }),
-  });
-  if (!r2.ok) throw new Error(`Gemini API ${r2.status} — ${(await r2.text()).slice(0, 200)}`);
-  const j2 = await r2.json();
-  return findImageB64(j2);
+  const interactionsCall = (async () => {
+    const t0 = Date.now();
+    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
+      method: 'POST',
+      headers: { 'x-goog-api-key': key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: MODEL_ID,
+        input: [
+          { type: 'text', text: prompt },
+          ...images.map(im => ({ type: 'image', mime_type: im.mime_type, data: im.data })),
+        ],
+        response_format: { type: 'image', mime_type: OUTPUT_MIME, aspect_ratio: OUTPUT_ASPECT },
+      }),
+    });
+    if (!r.ok) {
+      const txt = (await r.text()).slice(0, 300);
+      console.error('[gemini:interactions]', r.status, txt);
+      throw new Error(`${r.status} ${txt}`);
+    }
+    const img = findImageB64(await r.json());
+    if (!img) throw new Error('no image');
+    console.log('[gemini:interactions] won in', Math.round((Date.now() - t0) / 1000) + 's');
+    return img;
+  })();
+
+  try {
+    return await Promise.any([fastCall('fast1'), fastCall('fast2'), interactionsCall]);
+  } catch (agg) {
+    const msgs = (agg.errors || [agg]).map(e => String(e.message)).join(' | ');
+    if (/(^|\s)(401|403|429)\s/.test(msgs)) {
+      throw new Error('Gemini API 인증/할당량 오류 — API 키/결제 상태를 확인하세요');
+    }
+    throw new Error(`Gemini 호출 전부 실패 — ${msgs.slice(0, 200)}`);
+  }
 }
 
 /** 응답 JSON 어디에 있든 base64 이미지 데이터를 찾아냄 */
