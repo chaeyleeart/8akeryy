@@ -6,13 +6,13 @@
    — STYLE LOCK: IMAGE 3의 soft 3D 렌더 스타일 강제, 2D/스티커 금지
    — 레이어링 강화: 흰 강아지가 캐릭터 앞을 반드시 가림 + 접촉 그림자
    v3: 개인 얼굴 특징 반영 강화 (캐리커처 원칙)
-   v2: 성별 반영 / 옷색 반영 니트 / 배경 무시 / 강아지가 가림 금지
+   v2: 성별 반영 / 옷색 반영 니트 / 배경 무시 / 강아지 가림 금지
    ============================================================ */
 
-/** 사용할 모델 — Google Nano Banana 2 Lite (장당 ~$0.034, 9초 내외)
- *  2026-08-21 전시 중 표준(gemini-3.1-flash-image)이 요청당 50~105초로 대기 줄 발생 → lite 복귀.
- *  v4 프롬프트(STYLE LOCK)와 함께 사용 중 — 그림체 무너짐 재발 시 표준으로 되돌릴 것 */
-export const MODEL_ID = 'gemini-3.1-flash-lite-image';
+/** 사용할 모델 — Google Nano Banana 2 (장당 ~$0.067)
+ *  ⚠️ lite(gemini-3.1-flash-lite-image)는 v4 프롬프트로도 배경 강아지 훼손·합성 실패 (2026-08-21 전시 중 확인, 2회 탈락).
+ *  표준 모델도 혼잡 시간대엔 요청당 50~105초 걸릴 수 있음 (Google 서버 부하, 코드 문제 아님) */
+export const MODEL_ID = 'gemini-3.1-flash-image';
 
 /** 의상 규칙 */
 export const OUTFIT_RULE = 'a cozy knit sweater whose color and tone follow the visitor\'s actual clothing; cream if not visible';
