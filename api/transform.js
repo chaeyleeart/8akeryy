@@ -11,6 +11,10 @@
      → Vercel 대시보드 Manage Blobs에서 archive/ 폴더만 보면
        홈페이지 아카이빙 후보를 바로 골라낼 수 있음
    환경변수: GEMINI_API_KEY (필수), BLOB_READ_WRITE_TOKEN (QR용)
+   ------------------------------------------------------------
+   2026-08-21 속도 개선: 1차 호출을 generateContent + 저지연 옵션으로 변경
+   (thinkingLevel minimal + imageSize 1K — 기본 추론 단계가 커서 50~105초 걸리던 것 단축 시도)
+   실패 시 2차로 기존 Interactions API 폴백 (기존 동작 보장)
    ============================================================ */
 import {
   MODEL_ID, PROMPT_COMPOSITE, OUTPUT_ASPECT, OUTPUT_MIME,
@@ -65,53 +69,61 @@ export default async function handler(req, res) {
 async function generateImage({ prompt, images }) {
   const key = process.env.GEMINI_API_KEY;
 
-  // 1차: Interactions API (현행)
+  // 1차: generateContent + 저지연 옵션 (thinking minimal, 1K, 4:5)
   try {
-    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
-      method: 'POST',
-      headers: { 'x-goog-api-key': key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: MODEL_ID,
-        input: [
-          { type: 'text', text: prompt },
-          ...images.map(im => ({ type: 'image', mime_type: im.mime_type, data: im.data })),
-        ],
-        response_format: { type: 'image', mime_type: OUTPUT_MIME, aspect_ratio: OUTPUT_ASPECT },
-      }),
-    });
+    const t0 = Date.now();
+    const r = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:generateContent`,
+      {
+        method: 'POST',
+        headers: { 'x-goog-api-key': key, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              { text: prompt },
+              ...images.map(im => ({ inline_data: { mime_type: im.mime_type, data: im.data } })),
+            ],
+          }],
+          generationConfig: {
+            responseModalities: ['IMAGE'],
+            imageConfig: { aspectRatio: OUTPUT_ASPECT, imageSize: '1K' },
+            thinkingConfig: { thinkingLevel: 'minimal' },
+          },
+        }),
+      }
+    );
     if (r.ok) {
       const j = await r.json();
       const img = findImageB64(j);
-      if (img) return img;
-      console.error('[gemini:interactions] no image in response', JSON.stringify(j).slice(0, 500));
+      if (img) {
+        console.log('[gemini:fast]', Math.round((Date.now() - t0) / 1000) + 's');
+        return img;
+      }
+      console.error('[gemini:fast] no image in response', JSON.stringify(j).slice(0, 500));
     } else {
-      console.error('[gemini:interactions]', r.status, (await r.text()).slice(0, 500));
+      console.error('[gemini:fast]', r.status, (await r.text()).slice(0, 500));
       if (r.status === 401 || r.status === 403 || r.status === 429) {
         throw new Error(`Gemini API ${r.status} — API 키/할당량/결제 상태를 확인하세요`);
       }
     }
   } catch (e) {
     if (String(e.message).startsWith('Gemini API')) throw e;
-    console.error('[gemini:interactions] fetch failed, falling back', e.message);
+    console.error('[gemini:fast] failed, falling back', e.message);
   }
 
-  // 2차: generateContent (레거시 호환)
-  const r2 = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:generateContent`,
-    {
-      method: 'POST',
-      headers: { 'x-goog-api-key': key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{
-          parts: [
-            { text: prompt },
-            ...images.map(im => ({ inline_data: { mime_type: im.mime_type, data: im.data } })),
-          ],
-        }],
-        generationConfig: { responseModalities: ['IMAGE'] },
-      }),
-    }
-  );
+  // 2차: Interactions API (기존 검증된 경로)
+  const r2 = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
+    method: 'POST',
+    headers: { 'x-goog-api-key': key, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: MODEL_ID,
+      input: [
+        { type: 'text', text: prompt },
+        ...images.map(im => ({ type: 'image', mime_type: im.mime_type, data: im.data })),
+      ],
+      response_format: { type: 'image', mime_type: OUTPUT_MIME, aspect_ratio: OUTPUT_ASPECT },
+    }),
+  });
   if (!r2.ok) throw new Error(`Gemini API ${r2.status} — ${(await r2.text()).slice(0, 200)}`);
   const j2 = await r2.json();
   return findImageB64(j2);
