@@ -9,12 +9,13 @@
    v2: 성별 반영 / 옷색 반영 니트 / 배경 무시 / 강아지 가림 금지
    ============================================================ */
 
-/** 사용할 모델 — Gemini 3 Pro Image (Nano Banana Pro, 장당 ~$0.134 @1K/2K)
- *  2026-08-21 전시 중 전환. 이유:
- *  - lite: v4 프롬프트로도 배경 강아지 훼손·합성 실패 (2회 탈락)
- *  - flash-image(표준): 알려진 용량/라우팅 병목으로 Pro보다 느림 (googleapis/js-genai#1544, 미해결)
- *    → 혼잡 시간대 요청당 50~105초까지 튐. Pro가 품질·속도 모두 우위일 수 있음 */
-export const MODEL_ID = 'gemini-3-pro-image-preview';
+/** 사용할 모델 — Google Nano Banana 2 (장당 ~$0.067) ★ 확정, 바꾸지 말 것 ★
+ *  2026-08-21 전시 중 3개 모델 실측 결론:
+ *  - lite: 9초로 빠르지만 배경 강아지 훼손·합성 실패 (v4 프롬프트로도 2회 탈락)
+ *  - pro(gemini-3-pro-image-preview): 81초 + 결과물 구도 틀어짐 (3장 합성과 궁합 나쁨, 탈락)
+ *  - flash-image(표준): 품질 유일하게 합격. 단 혼잡 시간대 50~105초 (Google측 병목, js-genai#1544)
+ *  속도는 모델로 해결 불가 → 대기 안내 문구로 기대치 관리할 것 */
+export const MODEL_ID = 'gemini-3.1-flash-image';
 
 /** 의상 규칙 */
 export const OUTFIT_RULE = 'a cozy knit sweater whose color and tone follow the visitor\'s actual clothing; cream if not visible';
@@ -24,7 +25,7 @@ export const FIXED_POSE = 'sitting snugly, front-facing, relaxed, only visible f
 
 /**
  * 단일 호출 합성 프롬프트 (v4).
- * 이미지 순서: [1] 관관객 사진 [2] 배경 프리셋(강아지만) [3] 구도/화풍 예시
+ * 이미지 순서: [1] 관람객 사진 [2] 배경 프리셋(강아지만) [3] 구도/화풍 예시
  */
 export const PROMPT_COMPOSITE = `
 You are creating a PERSONALIZED CARICATURE for a photo booth — someone who knows the visitor must recognize them at a single glance.
