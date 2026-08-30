@@ -2,358 +2,45 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>오늘의 친구 찾기 · 8akeryy</title>
-<meta name="description" content="아이들에게 행복한 하루를 선물해주세요 — 방이가 가장 잘 맞는 친구를 소개해드려요." />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>오늘의 친구 찾기 — 전시 종료 · 8akeryy</title>
+<meta name="description" content="「오늘의 친구 찾기」는 전시와 함께 종료되었습니다. 기록은 전시 아카이브에서 만나보세요." />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <style>
-:root{
-  --cream:#F4EAD6; --ink:#3E3216; --ink-soft:#8C7C5C;
-  --pink:#EFD3D7; --pink-deep:#CD8E96; --gold:#E8BC4D;
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;background:#000;font-family:"Pretendard",sans-serif;color:var(--ink);
-          overflow:hidden;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;}
-
-/* ---------- 스테이지: 3:4 영역을 화면 중앙에 최대로 ---------- */
-#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0e0a08;}
-#frame{position:relative;aspect-ratio:3/4;height:100%;max-width:100%;overflow:hidden;background:#0e0a08;}
-@supports not (aspect-ratio:3/4){ #frame{width:100%;height:100%;} }
-
-/* 미디어 레이어 */
-.media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s ease;}
-.media.on{opacity:1;}
-
-/* 글로우 전환 */
-#glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 46%, #fff7e6 0%, var(--cream) 55%, #f7e9c9 100%);
-      opacity:0;pointer-events:none;transition:opacity .5s ease;z-index:30;}
-#glow.on{opacity:1;}
-
-/* ---------- 하단 대사/UI 오버레이 ---------- */
-#overlay{position:absolute;left:0;right:0;bottom:0;z-index:20;padding:0 6% 18%;
-         background:linear-gradient(to top, rgba(35,24,12,.66) 0%, rgba(35,24,12,.42) 55%, rgba(35,24,12,.12) 82%, transparent 100%);
-         display:flex;flex-direction:column;gap:16px;align-items:center;justify-content:flex-end;
-         min-height:62%;pointer-events:none;}
-#overlay > *{pointer-events:auto;}
-
-.caption{width:100%;text-align:center;color:#fff;text-shadow:0 2px 16px rgba(35,24,12,.65);
-         font-size:clamp(21px,3vh,29px);line-height:1.6;font-weight:700;letter-spacing:-.01em;
-         opacity:0;transform:translateY(10px);transition:opacity .5s ease,transform .5s ease;min-height:2.4em;}
-.caption.on{opacity:1;transform:none;}
-.caption .nm{color:var(--gold);font-weight:800;}
-
-.speaker{display:inline-block;font-size:12.5px;font-weight:800;letter-spacing:.22em;color:var(--gold);
-         text-transform:uppercase;margin-bottom:6px;opacity:.95;}
-
-.answers{width:100%;display:flex;flex-direction:column;gap:10px;opacity:0;transform:translateY(12px);
-         transition:opacity .5s ease,transform .5s ease;}
-.answers.on{opacity:1;transform:none;}
-.answers button{appearance:none;border:none;font-family:inherit;cursor:pointer;
-  background:rgba(255,252,245,.94);color:var(--ink);font-size:clamp(16px,2.2vh,21px);font-weight:700;
-  padding:16px 20px;border-radius:18px;letter-spacing:-.01em;
-  box-shadow:0 4px 18px rgba(35,24,12,.25);transition:transform .15s ease,background .2s ease;}
-.answers button:active{transform:scale(.97);background:var(--pink);}
-
-.tap-hint{color:#fff;font-size:clamp(15px,2vh,19px);font-weight:600;letter-spacing:.02em;
-          text-shadow:0 2px 12px rgba(35,24,12,.6);animation:pulse 2.2s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:.55;}50%{opacity:1;}}
-
-.progress{display:flex;gap:7px;justify-content:center;margin-bottom:2px;}
-.progress i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);transition:background .3s;}
-.progress i.on{background:var(--gold);}
-
-/* ---------- 어트랙트 타이틀 ---------- */
-#attract-ui{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;
-            justify-content:flex-end;padding-bottom:12%;gap:18px;cursor:pointer;
-            background:linear-gradient(to top, rgba(35,24,12,.5), transparent 45%);}
-#attract-ui img{width:min(46%,240px);filter:drop-shadow(0 3px 14px rgba(35,24,12,.35)) brightness(0) invert(1);opacity:.96;}
-#attract-ui .t1{color:#fff;font-size:clamp(17px,2.4vh,22px);font-weight:600;text-shadow:0 2px 12px rgba(35,24,12,.6);
-                line-height:1.6;text-align:center;}
-
-/* ---------- 결과 카드 ---------- */
-#result{position:absolute;inset:0;z-index:25;display:none;flex-direction:column;align-items:center;
-        justify-content:center;padding:7%;gap:0;}
-#result.on{display:flex;}
-#result .card{width:100%;max-width:420px;background:rgba(255,252,245,.97);border-radius:28px;
-              box-shadow:0 18px 60px rgba(35,24,12,.4);padding:34px 26px 28px;text-align:center;
-              animation:cardIn .7s cubic-bezier(.2,.75,.25,1.1) both;}
-@keyframes cardIn{from{opacity:0;transform:translateY(26px) scale(.96);}to{opacity:1;transform:none;}}
-#result .eyebrow{font-size:11.5px;letter-spacing:.3em;color:var(--pink-deep);font-weight:800;margin-bottom:14px;text-transform:uppercase;}
-#result .face{width:150px;height:150px;margin:0 auto 14px;border-radius:50%;background:var(--cream);
-              overflow:hidden;display:flex;align-items:flex-start;justify-content:center;border:3px solid var(--pink);}
-#result .face img{width:74%;margin-top:10px;}
-#result h2{font-size:34px;letter-spacing:-.03em;margin-bottom:6px;}
-#result .tag{display:inline-block;font-size:13px;font-weight:800;color:var(--pink-deep);background:var(--pink);
-             border-radius:999px;padding:7px 16px;margin-bottom:14px;}
-#result .intro{font-size:15.5px;line-height:1.7;color:var(--ink);}
-#result .next{margin-top:20px;appearance:none;border:none;font-family:inherit;cursor:pointer;width:100%;
-              background:var(--ink);color:#fff;font-size:16px;font-weight:800;padding:16px;border-radius:999px;}
-
-/* ---------- 키링/라운지 안내 ---------- */
-#guide{position:absolute;inset:0;z-index:25;display:none;flex-direction:column;align-items:center;
-       justify-content:center;padding:8%;text-align:center;background:radial-gradient(circle at 50% 35%, #fff7e6, var(--cream) 75%);}
-#guide.on{display:flex;}
-#guide .face{width:120px;height:120px;border-radius:50%;background:#fff;overflow:hidden;border:3px solid var(--pink);
-             display:flex;align-items:flex-start;justify-content:center;margin-bottom:18px;}
-#guide .face img{width:74%;margin-top:8px;}
-#guide h2{font-size:clamp(24px,3.4vh,30px);letter-spacing:-.03em;line-height:1.4;margin-bottom:18px;}
-#guide h2 .nm{color:var(--pink-deep);}
-#guide .steps{display:flex;flex-direction:column;gap:12px;width:100%;max-width:400px;margin-bottom:26px;}
-#guide .step{display:flex;align-items:center;gap:14px;background:#fff;border-radius:18px;padding:16px 18px;
-             box-shadow:0 6px 20px rgba(62,50,22,.08);text-align:left;}
-#guide .step .no{flex:none;width:34px;height:34px;border-radius:50%;background:var(--pink);color:var(--ink);
-                 font-weight:800;display:flex;align-items:center;justify-content:center;font-size:16px;}
-#guide .step p{font-size:15px;line-height:1.5;font-weight:600;}
-#guide .bangi-line{font-size:14.5px;color:var(--ink-soft);line-height:1.6;margin-bottom:24px;max-width:380px;}
-#guide .home{appearance:none;border:1.5px solid var(--ink);background:transparent;color:var(--ink);
-             font-family:inherit;font-size:15px;font-weight:700;padding:13px 34px;border-radius:999px;cursor:pointer;}
+:root{--cream:#F7EDD2;--sage:#C9D2CA;--pink:#EFD3D7;--pink-deep:#CD8E96;--ink:#3E3216;--ink-soft:#8C7C5C;--line:#E9E0CC;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{background:#fff;color:var(--ink);font-family:"Pretendard",sans-serif;-webkit-font-smoothing:antialiased;
+  display:flex;align-items:center;justify-content:center;padding:24px;}
+.stripe-band{position:fixed;left:0;right:0;height:10px;
+  background-image:repeating-linear-gradient(90deg,var(--sage) 0 11px,transparent 11px 30px),
+  repeating-linear-gradient(90deg,var(--pink) 20px 23px,transparent 23px 30px);}
+.stripe-band.top{top:0;}
+.stripe-band.bottom{bottom:0;}
+.card{max-width:460px;width:100%;text-align:center;animation:up .8s cubic-bezier(.2,.75,.2,1) both;}
+@keyframes up{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+.card img.logo{height:34px;margin:0 auto 30px;display:block;}
+.badge{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--pink-deep);background:var(--cream);border:1px solid var(--line);border-radius:999px;padding:8px 18px;margin-bottom:22px;}
+h1{font-size:clamp(24px,6vw,32px);font-weight:800;letter-spacing:-.03em;line-height:1.35;margin-bottom:18px;}
+p{font-size:14.5px;line-height:1.95;color:var(--ink-soft);margin-bottom:10px;}
+.btn{display:inline-block;margin-top:26px;font-weight:600;font-size:14px;letter-spacing:.02em;color:#fff;
+  background:var(--ink);border-radius:999px;padding:15px 32px;text-decoration:none;transition:background .3s,transform .3s;}
+.btn:hover{background:var(--pink-deep);transform:translateY(-2px);}
+.sub{margin-top:18px;font-size:12.5px;color:var(--ink-soft);}
+.sub a{color:var(--pink-deep);font-weight:600;text-decoration:none;}
 </style>
 </head>
 <body>
-<div id="stage">
-  <div id="frame">
-    <!-- 미디어 레이어 -->
-    <img  id="m-attract" class="media" src="assets/attract.jpg" alt="" />
-    <video id="m-door"  class="media" src="assets/v2_door.mp4"  muted playsinline preload="auto"></video>
-    <video id="m-idle"  class="media" src="assets/v4_idle.mp4"  muted playsinline preload="auto" loop></video>
-    <video id="m-think" class="media" src="assets/v5_think.mp4" muted playsinline preload="auto"></video>
-    <audio id="bgm" src="assets/bgm.mp3" loop preload="auto"></audio>
-    <div id="glow"></div>
-
-    <!-- 어트랙트 -->
-    <div id="attract-ui">
-      <img src="assets/logo.png" alt="8akeryy" />
-      <div class="t1">행복한 시간을 기다리는 아이들이 있어요<br/>화면을 터치해 문을 열어주세요</div>
-    </div>
-
-    <!-- 대사 + 선택지 -->
-    <div id="overlay" style="display:none;">
-      <div class="progress" id="progress" style="display:none;"></div>
-      <div class="caption" id="caption"></div>
-      <div class="answers" id="answers"></div>
-      <div class="tap-hint" id="tap-hint" style="display:none;">터치해서 계속하기</div>
-    </div>
-
-    <!-- 결과 카드 -->
-    <div id="result">
-      <div class="card">
-        <div class="eyebrow">오늘 함께할 친구</div>
-        <div class="face"><img id="r-img" src="" alt=""/></div>
-        <h2 id="r-name"></h2>
-        <div class="tag" id="r-tag"></div>
-        <p class="intro" id="r-intro"></p>
-        <button class="next" onclick="showGuide()">이음 키링 받으러 가기</button>
-      </div>
-    </div>
-
-    <!-- 키링/라운지 안내 -->
-    <div id="guide">
-      <div class="face"><img id="g-img" src="" alt=""/></div>
-      <h2><span class="nm" id="g-name"></span>의 이음 키링을 받아주세요</h2>
-      <div class="steps">
-        <div class="step"><div class="no">1</div><p>이 화면을 직원에게 보여주면<br/><b>이음 키링</b>을 드려요</p></div>
-        <div class="step"><div class="no">2</div><p>키링을 들고 <b>게임 라운지</b>로 이동!</p></div>
-        <div class="step"><div class="no">3</div><p><b id="g-name2"></b>가 그곳에서 기다리고 있어요</p></div>
-      </div>
-      <p class="bangi-line" id="g-line"></p>
-      <button class="home" onclick="restart()">처음으로</button>
-    </div>
-  </div>
-</div>
-
-<script>
-/* ============================================================
-   8akeryy 오늘의 친구 찾기 — v2.1 (봉사자 컨셉)
-   플로우: 어트랙트 → 문열림(V2) → 글로우 → 방이 인사(V4 idle)
-         → 질문5 → 고민(V5') → 결과 카드 → 키링·라운지 안내
-   ============================================================ */
-const DOGS = {
-  dal:  { name:"달이", img:"assets/dal.png",  tag:"활발하고 용감한 아이",
-          intro:"우리 집에서 제일 씩씩한 아이. 처음 보는 길도, 처음 보는 사람도 꼬리부터 먼저 반겨. 너처럼 기운 넘치는 사람을 기다리고 있었어!",
-          line:"“오늘 하루, 달이에게 가장 신나는 시간을 선물해줘. 잘 부탁해!” — 방이" },
-  kong: { name:"콩이", img:"assets/kong.png", tag:"느긋하고 온화한 아이",
-          intro:"서두르는 법이 없는 아이. 콩이 옆에 있으면 시간이 천천히 흘러. 너랑 있으면 참 편안해할 거야.",
-          line:"“오늘 하루, 콩이에게 가장 포근한 시간을 선물해줘. 잘 부탁해!” — 방이" },
-  byul: { name:"별이", img:"assets/byul.png", tag:"섬세하고 감수성 높은 아이",
-          intro:"말하지 않아도 마음을 알아채는 아이. 누가 슬픈지 제일 먼저 알고, 슬며시 옆에 와서 앉아. 분명 너랑 통할 거야.",
-          line:"“오늘 하루, 별이에게 가장 다정한 시간을 선물해줘. 잘 부탁해!” — 방이" }
-};
-
-const GREETINGS = [
-  "오늘 아이들에게 행복한 하루를<br/>선물해주기로 한 사람이구나!<br/>와줘서 고마워.",
-  "우리 베이커리에는 행복한 시간을<br/>기다리는 친구들이 있어.",
-  "너에 대해 조금 더 알려주면, 오늘 너와<br/>가장 잘 맞는 친구를 소개시켜줄게!"
-];
-
-const QUESTIONS = [
-  { q:"오늘 하루는 어땠어?",
-    a:[{t:"신나게 뛰어다닌 하루",s:"dal"},{t:"구름처럼 느긋한 하루",s:"kong"},{t:"생각이 많았던 하루",s:"byul"}] },
-  { q:"쉬는 날엔 주로 뭐 해?",
-    a:[{t:"무조건 밖으로!",s:"dal"},{t:"집에서 뒹굴뒹굴",s:"kong"},{t:"좋아하는 것에 깊이 빠지기",s:"byul"}] },
-  { q:"처음 만난 친구 앞에선?",
-    a:[{t:"내가 먼저 인사해",s:"dal"},{t:"웃으면서 천천히 다가가",s:"kong"},{t:"조용히 지켜봐",s:"byul"}] },
-  { q:"기운 없는 날, 뭐가 제일 필요해?",
-    a:[{t:"신나는 기분 전환",s:"dal"},{t:"아무것도 안 하는 시간",s:"kong"},{t:"마음 알아주는 한마디",s:"byul"}] },
-  { q:"여행을 간다면 어떤 여행이 좋아?",
-    a:[{t:"계획 없이 훌쩍 떠나는 여행",s:"dal"},{t:"숙소에서 푹 쉬는 여행",s:"kong"},{t:"사진과 일기로 남기는 여행",s:"byul"}] },
-  { q:"친구들 사이에서 너는 어떤 사람이야?",
-    a:[{t:"분위기 메이커!",s:"dal"},{t:"같이 있으면 편한 사람",s:"kong"},{t:"고민을 들어주는 사람",s:"byul"}] },
-  { q:"제일 좋아하는 날씨는?",
-    a:[{t:"햇살 쨍쨍한 맑은 날",s:"dal"},{t:"포근하게 흐린 날",s:"kong"},{t:"창가에서 듣는 빗소리",s:"byul"}] },
-  { q:"마지막! 오늘 그 친구랑 어떤 시간을 보내주고 싶어?",
-    a:[{t:"같이 신나게 달리기",s:"dal"},{t:"나란히 낮잠",s:"kong"},{t:"가만히 눈 맞추기",s:"byul"}] }
-];
-const REACTIONS = ["그렇구나~", "오~ 좋다!", "응응, 알 것 같아", "좋은데?", "오호 그렇단 말이지~", "점점 더 알 것 같아!", "거의 다 왔어!", "마지막까지 고마워!"];
-
-const $ = id => document.getElementById(id);
-const media = { attract:$("m-attract"), door:$("m-door"), idle:$("m-idle"), think:$("m-think") };
-const KIOSK_RESET_MS = 90000;
-let scores, qIndex, idleTimer, busy=false;
-
-function show(el){ el.classList.add("on"); }
-function hide(el){ el.classList.remove("on"); }
-function switchMedia(key){
-  Object.entries(media).forEach(([k,el])=>{
-    if(k===key){ el.classList.add("on"); if(el.tagName==="VIDEO"){ el.currentTime=0; el.play().catch(()=>{});} }
-    else { el.classList.remove("on"); if(el.tagName==="VIDEO") el.pause(); }
-  });
-}
-function caption(html, speaker=true){
-  const c=$("caption");
-  hide(c);
-  setTimeout(()=>{ c.innerHTML=(speaker?'<div><span class="speaker">방이</span></div>':'')+html; show(c); },260);
-}
-function glowTo(fn, holdMs=520){
-  show($("glow"));
-  setTimeout(()=>{ fn(); setTimeout(()=>hide($("glow")), 180); }, holdMs);
-}
-
-/* ---------- S1 어트랙트 ---------- */
-function toAttract(){
-  busy=false; scores={dal:0,kong:0,byul:0}; qIndex=0;
-  $("result").classList.remove("on"); $("guide").classList.remove("on");
-  $("overlay").style.display="none"; $("attract-ui").style.display="flex";
-  hide($("glow")); hide($("caption")); $("answers").innerHTML="";
-  switchMedia("attract");
-}
-$("attract-ui").addEventListener("click", ()=>{ if(busy) return; busy=true; startBgm(); playDoor(); });
-
-const bgm=$("bgm");
-let bgmStarted=false;
-function startBgm(){
-  if(bgmStarted) return;
-  bgm.volume=0; bgm.play().then(()=>{
-    bgmStarted=true;
-    let vv=0; const iv=setInterval(()=>{ vv+=0.02; bgm.volume=Math.min(vv,0.3); if(vv>=0.3) clearInterval(iv); },200);
-  }).catch(()=>{});
-}
-
-/* ---------- S2 문 열림 → 글로우 → S3 인사 ---------- */
-function playDoor(){
-  $("attract-ui").style.display="none";
-  switchMedia("door");
-  const d=media.door;
-  const onEnd=()=>{ d.removeEventListener("ended",onEnd); glowTo(()=>{ switchMedia("idle"); greet(0); }); };
-  d.addEventListener("ended", onEnd);
-  // 안전장치: ended 미발화 대비
-  setTimeout(()=>{ if(!media.idle.classList.contains("on")) onEnd(); }, (d.duration||4.1)*1000+600);
-}
-
-/* ---------- S3 인사 (탭해서 진행) ---------- */
-function greet(i){
-  $("overlay").style.display="flex";
-  caption(GREETINGS[i]);
-  $("tap-hint").style.display="block";
-  const next=()=>{
-    $("frame").removeEventListener("click", next);
-    if(i+1<GREETINGS.length) greet(i+1);
-    else { $("tap-hint").style.display="none"; ask(); }
-  };
-  setTimeout(()=>$("frame").addEventListener("click", next), 600);
-  resetIdleTimer();
-}
-
-/* ---------- S4 질문 ---------- */
-function renderProgress(){
-  const p=$("progress"); p.style.display="flex";
-  p.innerHTML=QUESTIONS.map((_,i)=>`<i class="${i<qIndex?"on":""}"></i>`).join("");
-}
-function ask(){
-  renderProgress();
-  if(qIndex>=QUESTIONS.length) return think();
-  const item=QUESTIONS[qIndex];
-  caption(item.q);
-  const box=$("answers"); box.innerHTML="";
-  item.a.forEach(opt=>{
-    const b=document.createElement("button");
-    b.textContent=opt.t;
-    b.onclick=(e)=>{
-      e.stopPropagation();
-      if(box.dataset.lock) return; box.dataset.lock="1";
-      scores[opt.s]++; qIndex++;
-      hide(box);
-      caption(REACTIONS[Math.min(qIndex-1,REACTIONS.length-1)]);
-      setTimeout(()=>{ delete box.dataset.lock; box.innerHTML=""; ask(); }, 950);
-      resetIdleTimer();
-    };
-    box.appendChild(b);
-  });
-  setTimeout(()=>show(box), 500);
-}
-
-/* ---------- S5 고민 → 결과 ---------- */
-function pickWinner(){
-  const m=Math.max(scores.dal,scores.kong,scores.byul);
-  const tied=Object.keys(scores).filter(k=>scores[k]===m);
-  return tied[Math.floor(Math.random()*tied.length)];
-}
-function think(){
-  $("progress").style.display="none";
-  caption("고마워, 이제 알 것 같아!<br/>음… 누가 좋을까……");
-  switchMedia("think");
-  const t=media.think;
-  const onEnd=()=>{ t.removeEventListener("ended",onEnd); showResult(); };
-  t.addEventListener("ended", onEnd);
-  setTimeout(()=>{ if(!$("result").classList.contains("on")) onEnd(); }, (t.duration||5.1)*1000+600);
-}
-function showResult(){
-  switchMedia("idle");
-  $("overlay").style.display="none";
-  let w=pickWinner();
-  if(w==="kong") w="byul"; else if(w==="byul") w="kong";
-  const d=DOGS[w];
-  $("r-img").src=d.img; $("r-img").alt=d.name;
-  $("r-name").textContent=d.name;
-  $("r-tag").textContent=d.tag;
-  // 마침표 기준 줄바꿈 (가독성)
-  $("r-intro").innerHTML = d.intro.split(". ").map(s=>s.endsWith(".")||s.endsWith("!")?s:s+".").join("<br/>");
-  $("result").dataset.dog=Object.keys(DOGS).find(k=>DOGS[k]===d);
-  $("result").classList.add("on");
-  resetIdleTimer();
-}
-
-/* ---------- S7 키링·라운지 안내 ---------- */
-function showGuide(){
-  const d=DOGS[$("result").dataset.dog];
-  $("result").classList.remove("on");
-  $("g-img").src=d.img;
-  $("g-name").textContent=d.name;
-  $("g-name2").textContent=d.name;
-  $("g-line").textContent=d.line;
-  $("guide").classList.add("on");
-  resetIdleTimer();
-}
-function restart(){ glowTo(()=>toAttract(), 400); }
-
-/* ---------- 방치 리셋 ---------- */
-function resetIdleTimer(){
-  clearTimeout(idleTimer);
-  idleTimer=setTimeout(()=>toAttract(), KIOSK_RESET_MS);
-}
-["touchstart","click"].forEach(ev=>document.addEventListener(ev, ()=>{ if(busy) resetIdleTimer(); }, {passive:true}));
-
-toAttract();
-</script>
+<div class="stripe-band top"></div>
+<main class="card">
+  <img class="logo" src="assets/logo.png" alt="8akeryy" />
+  <div class="badge">Exhibition Ended · 2026. 8. 21</div>
+  <h1>베이커리의 문은<br>살며시 닫혔어요</h1>
+  <p>사흘 동안 아이들에게 행복한 하루를 선물해 주셔서 고맙습니다.<br>방이의 질문들, 그리고 달이·콩·별이의 이야기는<br>전시 아카이브에 그대로 남아 있어요.</p>
+  <a class="btn" href="../archive.html#matching">전시 아카이브 보러 가기 →</a>
+  <div class="sub">문의 · <a href="mailto:8akeryy@gmail.com">8akeryy@gmail.com</a></div>
+</main>
+<div class="stripe-band bottom"></div>
 </body>
 </html>
