@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>프로젝트 — 기다릴게, 이름을 · 8akeryy</title>
-<meta name="description" content="「기다릴게, 이름을」 — 유기견 인식 개선 캠페인형 팝업스토어" />
+<title>프로젝트 — 기다릴게, 네 이름을 · 8akeryy</title>
+<meta name="description" content="「기다릴게, 네 이름을」 — 유기견 인식 개선 캠페인형 팝업스토어" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
@@ -20,10 +20,9 @@
   <nav class="menu">
     <a href="index.html">홈</a>
     <a href="project.html" class="active">프로젝트</a>
-    <a href="gallery.html">아카이브</a>
-    <!-- 배포 후 https://booth.8akeryy.com 으로 교체 -->
-    <a href="booth/index.html">Photo Booth</a>
-    <a href="matching/">오늘의 친구</a>
+    <a href="archive.html">전시 아카이브</a>
+    <a href="gallery.html">갤러리</a>
+    <a href="shop.html">Shop</a>
   </nav>
   <a class="nav-cta" href="mailto:8akeryy@gmail.com">문의하기</a>
   <button class="nav-toggle" aria-label="메뉴 열기">☰</button>
@@ -34,7 +33,7 @@
   <section class="page-hero">
     <div class="wrap narrow">
       <div class="eyebrow">Project · 2026</div>
-      <h1>기다릴게,<br>이름을</h1>
+      <h1>기다릴게,<br>네 이름을</h1>
       <p class="quote reveal">“기다릴 사람이 없던 아이에게,<br>오늘은 당신이 가장 행복한 기억이 되어주세요.”</p>
     </div>
   </section>
@@ -49,38 +48,6 @@
     </div>
   </section>
 
-
-  <!-- Origin Film -->
-  <section class="block" id="originFilm">
-    <div class="wrap">
-      <div class="reveal" style="text-align:center;max-width:640px;margin:0 auto 40px;">
-        <div class="eyebrow">Origin Film</div>
-        <h2>구름 위 베이커리에서 온 장면들</h2>
-        <p style="margin-top:14px;color:var(--ink-soft);font-size:15px;">「기다릴게, 이름을」 오리진 필름 중에서</p>
-      </div>
-      <div class="film-grid">
-        <figure class="film-cell reveal" style="grid-column:span 12;"><video src="film/f01_clouds.mp4" autoplay muted loop playsinline></video><figcaption>구름 너머, 어딘가</figcaption></figure>
-        <figure class="film-cell reveal" style="grid-column:span 6;"><img src="film/f02_arch.jpg" alt="" loading="lazy"/><figcaption>무지개 다리를 건너면</figcaption></figure>
-        <figure class="film-cell reveal" style="grid-column:span 6;"><img src="film/f03_bakery_ext.jpg" alt="" loading="lazy"/><figcaption>골목 끝, 8akeryy</figcaption></figure>
-        <figure class="film-cell reveal" style="grid-column:span 12;"><video src="film/f04_baking.mp4" autoplay muted loop playsinline></video><figcaption>방이는 오늘도 반죽을 칩니다</figcaption></figure>
-        <figure class="film-cell reveal" style="grid-column:span 7;"><img src="film/f05_cake.jpg" alt="" loading="lazy"/><figcaption>누군가를 위한 케이크</figcaption></figure>
-        <figure class="film-cell reveal" style="grid-column:span 5;"><img src="film/f06_letter.jpg" alt="" loading="lazy"/><figcaption>가게로 도착한 편지 한 장</figcaption></figure>
-        <figure class="film-cell reveal" style="grid-column:span 5;"><img src="film/f08_delayed.jpg" alt="" loading="lazy"/><figcaption>기다림은 자꾸 길어지고</figcaption></figure>
-        <figure class="film-cell reveal" style="grid-column:span 7;"><img src="film/f09_landing.jpg" alt="" loading="lazy"/><figcaption>그래도, 도착</figcaption></figure>
-        <figure class="film-cell reveal" style="grid-column:span 12;"><video src="film/f11_meet.mp4" autoplay muted loop playsinline></video><figcaption>처음 만난 날</figcaption></figure>
-        <figure class="film-cell reveal" style="grid-column:span 6;"><img src="film/f10_dal.jpg" alt="" loading="lazy"/><figcaption>이름을 기다리는 아이</figcaption></figure>
-        <figure class="film-cell reveal" style="grid-column:span 6;"><img src="film/f12_ending.jpg" alt="" loading="lazy"/><figcaption>기다릴게, 이름을</figcaption></figure>
-      </div>
-    </div>
-  </section>
-  <style>
-  .film-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;}
-  .film-cell{position:relative;margin:0;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px var(--shadow);background:var(--cream);}
-  .film-cell img,.film-cell video{width:100%;height:100%;object-fit:cover;display:block;}
-  .film-cell figcaption{position:absolute;left:0;right:0;bottom:0;padding:26px 18px 14px;background:linear-gradient(transparent,rgba(62,50,22,.55));color:#fff;font-size:13.5px;font-weight:600;letter-spacing:-.01em;}
-  @media(max-width:720px){.film-cell{grid-column:span 12 !important;}}
-  </style>
-
   <!-- 세 아이 -->
   <section class="block">
     <div class="wrap">
@@ -92,20 +59,20 @@
         <div class="pup reveal">
           <div class="face"><img src="characters/ddal_front.png" alt="달이" /></div>
           <h4>달이</h4>
-          <div class="tag">활발하고 용감한 아이</div>
-          <p class="line">당신의 곁을 든든하게 지켜줄 거예요.</p>
+          <div class="tag">활발하고 용감한 아이 · 대형견</div>
+          <p class="line">먼저 떠난 가족을 보내고 혼자가 됐지만, 여전히 씩씩하게 사람을 반겨요. 다만 큰 덩치 때문에 입양 문의가 오지 않아요.</p>
         </div>
         <div class="pup reveal">
           <div class="face"><img src="characters/grey_front.png" alt="콩" /></div>
           <h4>콩</h4>
-          <div class="tag">느긋하고 온화한 아이</div>
-          <p class="line">당신의 마음까지 차분하게 풀어줄 거예요.</p>
+          <div class="tag">느긋하고 온화한 아이 · 노령견</div>
+          <p class="line">10년을 함께한 가족에게 버려졌지만, 지금은 보호소에서 가장 온화한 아이. 오늘 옆에 앉아주면 금세 기대요.</p>
         </div>
         <div class="pup reveal">
           <div class="face"><img src="characters/brown_front.png" alt="별이" /></div>
           <h4>별이</h4>
-          <div class="tag">섬세하고 감수성 높은 아이</div>
-          <p class="line">당신의 작은 마음도 깊이 알아채 줄 거예요.</p>
+          <div class="tag">섬세하고 감수성 높은 아이 · 예민</div>
+          <p class="line">마음의 문이 굳게 닫혀 있던 아이. 오늘 천천히 다가가면, 별이가 먼저 다가올지도 몰라요.</p>
         </div>
       </div>
     </div>
@@ -122,23 +89,27 @@
         <div class="step reveal">
           <div class="n">01</div>
           <h4>러닝 게임</h4>
-          <p>환한 공원을 이 아이와 함께 달려요. 즐거운 산책을 선물하는 시간.</p>
+          <p>우중충한 보호소에서 환한 공원까지 달리기. 이 아이에게 ‘처음으로 즐거운 산책’을 알려주는 시간.</p>
         </div>
         <div class="step reveal">
           <div class="n">02</div>
           <h4>숨은그림찾기</h4>
-          <p>그림 속에 숨은 물건들을 찾아보세요. 그중 이 아이에게 꼭 맞는 물건을 골라 건네는 시간.</p>
+          <p>포근한 집에서 밥그릇·장난감·방석을 제자리에 놓아, 이 아이의 ‘자리’를 만들어 주는 과정.</p>
         </div>
         <div class="step reveal">
           <div class="n">03</div>
-          <h4>간식 만들기</h4>
-          <p>건강한 재료를 골라 수제 간식을 만들어요. 이 아이의 하루에 달콤한 한 입을 더하는 시간.</p>
+          <h4>리듬게임</h4>
+          <p>품에서 스르르 잠드는 아이를 끝까지 지키는 게임. 마음 놓고 잠들 수 있는 ‘안전’을 선물해요.</p>
         </div>
       </div>
       <div class="meta reveal">
         <span>한국콘텐츠진흥원 인재캠퍼스 3층</span>
-        <span>2026. 8. 19 (수) – 8. 21 (금) · 10:00–18:00</span>
-        <span>유기견 인식 개선 캠페인</span>
+        <span>2026. 8. 19 (수) – 8. 21 (금) · 10:00–17:00</span>
+        <span>유기견 인식 개선 캠페인 · 전시 종료</span>
+      </div>
+      <div class="reveal" style="max-width:640px;margin:44px auto 0;text-align:center;background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:28px 26px;">
+        <p style="margin:0 0 18px;font-size:14.5px;color:var(--ink);">이 전시는 2026년 8월 21일 막을 내렸어요.<br>매칭 태블릿·게임 라운지·애니메이션·AI 포토부스의 모든 기록을 아카이브에 정리했습니다.</p>
+        <a class="btn fill" href="archive.html">전시 아카이브 보기 →</a>
       </div>
     </div>
   </section>
