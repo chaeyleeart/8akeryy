@@ -2,12 +2,14 @@
    GET /api/booth-archive — 포토부스 공개 아카이브 목록
    ------------------------------------------------------------
    booth/results/archive/  : 공개(웹·SNS 게시) 동의분 → 목록 표시
-   booth/results/private/  : 미동의분 → 개수만 집계
    응답: { images: [{ url, uploadedAt, no }], total }
-   - total  : 전시 기간 생성된 전체 결과물 수 (= 부스를 다녀간 손님 수)
+   - total  : 전시 기간(2026. 8. 19–21) 전체 생성 수 = 방문자 수.
+              전시 종료 후 미동의분(private/) 원본 삭제에 대비해 고정값.
    - no     : 1..total 범위에서 고정 시드로 부여한 고유 랜덤 번호
-   - HIDDEN : 아카이브 페이지에서 내린 결과물 (Blob 원본은 유지)
+   - HIDDEN : 아카이브 페이지에서 내린 결과물
    ============================================================ */
+
+const TOTAL_VISITORS = 287; // 전시 종료 시점 archive+private 전체 집계
 
 const HIDDEN = new Set([
   'mt2efdm4-2taszv-aCxzVlysfsOGWs8brsptb6oW8PbItr.jpg',
@@ -43,7 +45,7 @@ export default async function handler(req, res) {
     const blobs = [];
     let cursor = '';
     for (let i = 0; i < 20; i++) {
-      const qs = new URLSearchParams({ prefix: 'booth/results/', limit: '100' });
+      const qs = new URLSearchParams({ prefix: 'booth/results/archive/', limit: '100' });
       if (cursor) qs.set('cursor', cursor);
       const r = await fetch(`https://blob.vercel-storage.com/?${qs}`, {
         headers: {
@@ -58,14 +60,10 @@ export default async function handler(req, res) {
       cursor = j.cursor;
     }
 
-    const total = blobs.length; // archive + private = 전체 생성 수
+    const total = TOTAL_VISITORS;
 
-    // 공개 동의분에서 HIDDEN 제외
-    let images = blobs.filter(b => {
-      const path = new URL(b.url).pathname; // 공개 URL 기준 (pathname 필드는 접미사가 다름)
-      if (!path.includes('archive/')) return false;
-      return !HIDDEN.has(path.split('/').pop());
-    });
+    // HIDDEN 제외 (공개 URL 기준 — pathname 필드는 접미사가 다름)
+    let images = blobs.filter(b => !HIDDEN.has(new URL(b.url).pathname.split('/').pop()));
 
     // 업로드 순으로 정렬 후, 1..total 범위의 고유 랜덤 번호 부여
     images.sort((a, b) => new Date(a.uploadedAt) - new Date(b.uploadedAt));
