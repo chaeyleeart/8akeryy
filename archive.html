@@ -282,14 +282,14 @@
       <div class="sec-head reveal">
         <div class="zone-label">Zone 03 · 상영관</div>
         <h2>AI 애니메이션<br>「기다릴게, 이름을」</h2>
-        <p>전시 상영작. 2분 45초, 11씬 36컷 전량을 AI 생성 파이프라인으로 제작했다.<br>엄마가 귓속말로 알려준 이름 하나를 품고,<br>무지개다리 앞 베이커리에서 가족을 기다리는 방이의 이야기.</p>
+        <p>약 2분 45초의 전시 상영작. 전 장면을 AI 생성 파이프라인으로 제작했다.<br>엄마가 귓속말로 알려준 이름 하나를 품고,<br>무지개다리 앞 베이커리에서 가족을 기다리는 방이의 이야기.</p>
       </div>
 
       <div class="pipeline reveal">
-        <div class="pp"><div class="pn">Step 1</div><h4>시나리오 · 컷리스트</h4><p>11씬 시나리오를 쓰고 36컷으로 분해. 컷마다 카메라와 필요한 키프레임을 정의했다.</p></div>
+        <div class="pp"><div class="pn">Step 1</div><h4>시나리오 · 컷리스트</h4><p>시나리오를 쓰고 컷 단위로 분해. 컷마다 카메라와 필요한 키프레임을 정의했다.</p></div>
         <div class="pp"><div class="pn">Step 2</div><h4>키프레임 생성</h4><p>이미지 생성 모델로 컷별 키프레임 제작. 캐릭터 시트를 기준 삼아 컷 간 일관성을 맞췄다.</p></div>
         <div class="pp"><div class="pn">Step 3</div><h4>이미지 → 영상</h4><p>확정된 키프레임을 image-to-video 모델로 컷 단위 영상화. 컷당 3–7초로 짧게 끊어 품질을 확보했다.</p></div>
-        <div class="pp"><div class="pn">Step 4</div><h4>편집 · 사운드</h4><p>36컷을 편집으로 이어 붙이고 자막과 사운드를 얹어 상영본을 완성했다.</p></div>
+        <div class="pp"><div class="pn">Step 4</div><h4>편집 · 사운드</h4><p>완성된 컷을 편집으로 이어 붙이고 자막과 사운드를 얹어 상영본을 완성했다.</p></div>
       </div>
 
       <div class="media-grid reveal">
@@ -405,7 +405,7 @@
           <thead><tr><th>파트</th><th>만든 것</th><th>도구</th></tr></thead>
           <tbody>
             <tr><td>브랜드 · IP</td><td>캐릭터 4종과 세계관, 로고·컬러 시스템, 패키징, 안내 책자·등신대·키링 등 현장 제작물</td><td>디자인 툴 · 이미지 생성 모델</td></tr>
-            <tr><td>애니메이션</td><td>2'45" 상영작 — 시나리오, 36컷 키프레임, 컷 단위 영상화, 편집</td><td>이미지 생성 · image-to-video · 영상 편집 툴</td></tr>
+            <tr><td>애니메이션</td><td>전시 상영작 — 시나리오, 키프레임, 컷 단위 영상화, 편집</td><td>이미지 생성 · image-to-video · 영상 편집 툴</td></tr>
             <tr><td>게임</td><td>체험형 스토리 게임 3편 (러닝 · 숨은그림찾기 · 리듬)</td><td>게임 엔진 · 자체 아트</td></tr>
             <tr><td>매칭 태블릿</td><td>생성 영상 + 대사 레이어 2단 구성의 시네마틱 설문 웹앱</td><td>웹 (HTML/JS) · 생성 영상 소스</td></tr>
             <tr><td>AI 포토부스</td><td>iPad 키오스크, 실시간 캐릭터 변환, QR 전달, 동의 기반 웹 게재</td><td>이미지 생성 API · Vercel Serverless · Blob</td></tr>
