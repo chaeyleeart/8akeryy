@@ -62,10 +62,9 @@ export default async function handler(req, res) {
 
     // 공개 동의분에서 HIDDEN 제외
     let images = blobs.filter(b => {
-      const path = b.pathname || new URL(b.url).pathname;
+      const path = new URL(b.url).pathname; // 공개 URL 기준 (pathname 필드는 접미사가 다름)
       if (!path.includes('archive/')) return false;
-      const name = path.split('/').pop();
-      return !HIDDEN.has(name);
+      return !HIDDEN.has(path.split('/').pop());
     });
 
     // 업로드 순으로 정렬 후, 1..total 범위의 고유 랜덤 번호 부여
