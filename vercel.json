@@ -13,7 +13,7 @@
   },
   "headers": [
     {
-      "source": "/showcase/game/Build/webgl_test.js.br",
+      "source": "/showcase/game/Build/webgl_test.framework.js.br",
       "headers": [
         {
           "key": "Content-Encoding",
