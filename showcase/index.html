@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff"><title>기다릴게, 이름을 · AI 크리에이터쇼 · 8akeryy</title>
+<meta name="description" content="아이들에게 행복한 하루를 선물해주세요. 설문, 게임, AI 포토부스, 편지로 이어지는 8akeryy 모바일 전시.">
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="showcase.css?v=20261020-6"><script src="showcase.js?v=20261020-7" defer></script>
+</head><body>
+<a class="skip" href="#experience">체험으로 이동</a>
+<header class="nav"><a class="logo" href="../index.html"><img src="../brand/mainlogo.png" alt="8akeryy"></a><nav class="menu" id="site-menu" aria-label="사이트 메뉴"><a href="../index.html">홈</a><a href="../archive.html">프로젝트 아카이브</a><a href="../gallery.html">갤러리</a><a class="active" href="./" aria-current="page">AI 크리에이터쇼</a></nav><a class="nav-cta" href="mailto:8akeryy@gmail.com">문의하기</a><button class="nav-toggle" aria-label="메뉴 열기" aria-controls="site-menu" aria-expanded="false">☰</button></header>
+<main class="showcase-main">
+<section id="welcome" class="showcase-hero">
+<div class="hero-copy"><p class="eyebrow">2026 AI CREATOR SHOW · NCA</p><h1>기다릴게,<br><span class="accent">이름을</span></h1><p class="hero-lead">아이들에게 행복한 하루를 선물해주세요.</p><p class="sub">우리 베이커리에는 행복한 시간을 기다리는 친구들이 있어요.<br>방이가 오늘 나와 가장 잘 맞는 친구를 소개해줄 거예요.</p><button class="primary" id="start">베이커리 문 열기 →</button><p class="hint">내 휴대폰에서 만나는 8akeryy · 앱 설치 없이 참여해요</p></div>
+<figure class="hero-door"><img src="../matching/assets/attract.jpg" alt="따뜻한 불빛이 새어 나오는 8akeryy 베이커리 문" fetchpriority="high"><figcaption>골목 끝, 8akeryy</figcaption></figure>
+</section>
+<section id="journey" class="journey" aria-label="체험 순서"><ol><li><span>01</span><b>오늘의 친구 찾기</b><small>방이와 나누는 이야기</small></li><li><span>02</span><b>게임 라운지</b><small>친구와 함께 보내는 하루</small></li><li><span>03</span><b>AI 포토부스</b><small>강아지들 사이, 오늘의 손님</small></li><li><span>04</span><b>편지 남기기</b><small>오늘 함께한 아이에게</small></li></ol></section>
+<section id="experience" class="experience" hidden aria-label="모바일 전시 체험">
+<div class="experience-top"><button id="home" class="text-button">← 전시 소개</button><span>기다릴게, 이름을</span><button id="sound" class="text-button" aria-pressed="false">소리 켜기 ♫</button></div>
+<nav class="progress" aria-label="체험 단계"><button data-step="0"><small>01</small>설문</button><button data-step="1"><small>02</small>게임</button><button data-step="2"><small>03</small>사진</button><button data-step="3"><small>04</small>편지</button></nav>
+<div class="companion" hidden><img id="companion-image" alt=""><span>오늘 함께할 친구, <b id="companion-name"></b></span></div>
+<section id="survey" class="survey" aria-label="오늘의 친구 찾기">
+<div class="cinema"><img id="scene-poster" src="../matching/assets/attract.jpg" alt="베이커리 문"><video id="scene-video" muted playsinline preload="none" hidden></video><span class="scene-label">8akeryy · 오늘의 친구 찾기</span></div>
+<div class="dialogue"><p class="eyebrow">01 · 오늘의 친구 찾기</p><p class="speaker">방이</p><div id="greeting"><h2 id="greeting-text" tabindex="-1"></h2><button class="primary" id="greeting-next">이야기 계속 듣기 →</button></div>
+<div id="questions" hidden><div class="question-meta"><span id="question-count"></span><progress id="question-progress" value="0" max="8" aria-label="설문 진행"></progress></div><h2 id="question" tabindex="-1"></h2><div id="answers"></div><p id="reaction" role="status"></p><button id="previous-question" class="text-button">← 이전 질문</button></div>
+<div id="thinking" hidden><h2 tabindex="-1" id="thinking-title">고마워, 이제 알 것 같아!<br>음… 누가 좋을까……</h2><p class="sub">방이가 오늘의 친구를 떠올리고 있어요.</p></div>
+<div id="match-result" hidden><img id="result-image" class="friend-portrait" alt=""><p class="eyebrow">오늘 함께할 친구</p><h2 id="result-name" tabindex="-1"></h2><p id="result-tag" class="tag"></p><p id="result-description" class="sub"></p><p id="result-line" class="friend-line"></p><button class="primary" data-next="1">친구와 하루 보내기 →</button></div>
+</div></section>
+<section id="game" class="panel game-panel" hidden>
+<p class="eyebrow">02 · 게임 라운지</p><h2 id="game-title" tabindex="-1">친구와 함께 보내는 하루</h2>
+<div class="game-companion"><img id="game-friend" alt=""><p id="game-invitation" class="sub"></p></div>
+<div id="game-shell" class="game-shell">
+<div class="game-toolbar"><span>8akeryy · PLAY</span><button class="text-button" id="expand-game" aria-pressed="false" aria-controls="game-shell">크게 보기 ↗</button></div>
+<div class="game-viewport" id="game-mount">
+<div id="game-launch" class="game-launch"><p>작은 친구에게<br><strong>행복한 하루를 선물해줘.</strong></p><button class="primary" id="launch-game">게임 시작하기 →</button><span>처음에는 약 100MB를 불러와요.<br>와이파이에 연결하면 좋아요.</span></div>
+<div id="game-loading" class="game-loading" hidden><span class="spinner" aria-hidden="true"></span><p id="game-load-status" role="status">친구를 만나러 가는 중…</p><progress id="game-progress" max="100" value="0" aria-label="게임 불러오기"></progress></div>
+</div>
+<div id="game-error" class="game-error" hidden><p id="game-error-text" role="alert"></p><button class="secondary" id="retry-game">다시 불러오기</button></div>
+</div>
+<p class="hint game-mobile-hint">휴대폰을 가로로 돌리고 ‘크게 보기’를 누르면 더 편하게 즐길 수 있어요.</p>
+<button class="primary" id="skip-game">사진 남기러 가기 →</button>
+<p class="hint">게임을 마치면 사진으로 이동해주세요.<br>다른 단계로 이동하면 게임이 종료되고, 다시 들어오면 처음부터 시작해요.</p>
+</section>
+<section id="photo" class="panel" hidden><p class="eyebrow">03 · AI 포토부스</p><h2 id="photo-title" tabindex="-1">강아지들 사이에<br><span class="accent">폭,</span> 파묻혀 볼까요?</h2><p class="sub">사진을 찍으면 8akeryy 화풍의 치비 캐릭터로 변신!<br>몽글몽글 강아지들 틈에 쏙 들어간 나를 만나보세요.</p>
+<div class="photo-examples" id="photo-examples"><figure><img src="../booth/assets/mock_preset.jpg" alt="잔디 위에서 손님을 기다리는 강아지 친구들"><figcaption>강아지들이 기다리는 자리</figcaption></figure><figure><img src="../booth/assets/mock_apply.jpg" alt="관람객이 캐릭터가 되어 강아지들 사이에 함께한 기존 AI 포토부스 예시"><figcaption>AI 변환 예시</figcaption></figure></div>
+<p id="photo-service" class="service-note" role="status">포토부스 연결을 확인하고 있어요.</p>
+<div class="photo-actions"><label class="secondary file-button">사진 선택<input id="photo-input" type="file" accept="image/*"></label><label class="secondary file-button">촬영하기<input id="camera-input" type="file" accept="image/*" capture="user"></label></div>
+<div id="photo-review" hidden><img id="photo-selected" alt="선택한 내 사진"><p class="hint">이 사진으로 강아지 친구들과 함께할게요.</p></div>
+<label class="consent"><input type="checkbox" id="photo-consent"><span>AI 사진 변환을 위해 선택한 사진이 전시 서버와 Google의 이미지 생성 서비스에 전송되는 데 동의해요. 사진을 공개 갤러리에 게시하지 않아요.</span></label>
+<button class="primary" id="generate-photo" disabled>AI 기념사진 만들기</button>
+<div id="photo-processing" hidden><span class="spinner" aria-hidden="true"></span><p>강아지들 사이로 폭, 파묻히는 중…</p><p class="hint">사진을 만드는 동안 이 화면에서 기다려주세요.</p><button class="text-button" id="cancel-photo">기다리기 취소</button></div>
+<p id="photo-status" role="status"></p><img id="photo-result" hidden alt="AI로 만든 나와 강아지 친구들의 기념사진"><button class="secondary" id="save-photo" hidden>기념사진 저장하기 ↓</button><button class="primary" id="photo-next" data-next="3" hidden>친구에게 편지 쓰기 →</button><button class="text-button" id="skip-photo" data-next="3">사진 없이 편지 남기기 →</button><p class="hint">선택한 사진과 완성 사진은 이 탭을 떠나기 전에 저장해주세요.</p>
+<aside class="archive-invitation photo-archive-invitation"><div><p class="eyebrow">PHOTO ARCHIVE · 2026.08</p><h3>강아지들 사이, 그날의 손님들</h3><p>지난 전시에서 함께 남긴 AI 기념사진.<br>그날의 손님들을 만나보세요.</p><button type="button" class="secondary" data-open-photos>사진 아카이브 둘러보기 ↗</button></div><img src="../booth/assets/mock_apply.jpg" alt="" loading="lazy"></aside>
+</section>
+<section id="letter" class="panel letter-panel" hidden><p class="eyebrow">04 · 나가는 길</p><h2 id="letter-title" tabindex="-1">마음 가는 대로,<br>편지 한 통</h2><p class="sub">짧은 안부도, 문득 떠오른 기억도.<br>누구에게든, 어떤 이야기든 자유롭게 남겨주세요.</p>
+<form id="letter-form"><div class="letter-paper"><textarea id="letter-message" required maxlength="500" placeholder="여기에 두고 싶은 마음을 자유롭게 적어주세요…" aria-label="자유롭게 편지 쓰기" rows="8"></textarea></div><p id="letter-count" class="hint">0 / 500</p>
+<label class="consent" id="letter-consent-wrap"><input type="checkbox" id="letter-consent"><span>이 편지를 편지 벽에 붙여, 다른 관람객도 읽을 수 있게 공개할게요.</span></label><p id="letter-service" class="hint"></p><p id="letter-error" role="status"></p><button class="primary" type="submit" id="submit-letter">나만 간직하기 ♡</button></form>
+<div id="letter-done" hidden><div class="finished-paper"><img src="assets/letter-paper.png" alt="8akeryy 원본 편지지"><div><p id="finished-message"></p></div></div><p id="letter-storage-status" class="sub" role="status"></p><div class="photo-actions"><button class="secondary" id="save-letter">편지 이미지 저장 ↓</button><button class="secondary" id="save-letter-text">텍스트 저장 ↓</button></div><button class="secondary" id="view-posted-letter" data-open-archive hidden>벽에 붙인 내 편지 보기 →</button><button class="text-button" id="edit-letter">다시 읽고 수정하기</button><button class="primary" id="finish">우리의 하루 마치기 →</button></div>
+<aside class="archive-invitation"><div><p class="eyebrow">LETTER ARCHIVE · 2026.08</p><h3>여기에 두고 간 마음.</h3><p>지난 쇼케이스의 89편과 새로 붙인 편지들.<br>다른 이들의 마음도 천천히 읽어보세요.</p><button type="button" class="secondary" data-open-archive>남겨진 마음 둘러보기 ↗</button></div><img src="../characters/brown_front.png" alt="" loading="lazy"></aside>
+</section>
+<section id="ending" class="panel ending" hidden><p class="eyebrow">8AKERYY · 기다릴게, 이름을</p><img id="ending-image" class="friend-portrait" alt=""><h2 id="ending-title" tabindex="-1">오늘 하루, 행복한 시간을<br>선물해줘서 고마워.</h2><p class="sub">당신이 이름을 불러주는 순간,<br>기다림이 시작됩니다.</p><button id="back-letter" class="secondary">내 편지 다시 보기</button><button id="restart" class="text-button">새로운 친구 만나기</button><p class="hint">새로 시작하면 이 탭의 사진과 체험 기록이 지워져요.<br>간직할 사진과 편지는 먼저 저장해주세요.</p></section>
+</section>
+<div class="archive-entry"><button type="button" class="text-button" data-open-photos>지난 전시 사진 둘러보기 →</button><button type="button" class="text-button" data-open-archive>편지 벽 둘러보기 →</button></div>
+<aside class="film-note"><b>베이커리의 이야기도 만나보세요.</b><p>애니메이션 「기다릴게, 이름을」은 전시장 화면에서 반복 상영됩니다.</p></aside>
+</main><footer class="showcase-footer"><div class="stripe stripe-band"></div><img src="../brand/mainlogo.png" alt="8akeryy"><p>YARR Studio · 2026 AI 크리에이터쇼</p><a href="../archive.html">지난 전시의 기록 →</a></footer>
+<dialog id="archive-dialog" aria-labelledby="archive-title"><div class="archive-dialog-top"><h2 id="archive-title">남겨진 마음 · 편지 아카이브</h2><button type="button" id="close-archive" class="secondary">체험으로 돌아가기 ×</button></div><iframe id="archive-frame" title="지난 쇼케이스에 남겨진 편지 89편" data-src="letters/" loading="lazy"></iframe></dialog>
+<audio id="bgm" src="../matching/assets/bgm.mp3" preload="none" loop></audio><noscript><p>체험을 진행하려면 JavaScript를 켜주세요.</p></noscript>
+</body></html>

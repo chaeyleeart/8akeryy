@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
+  <title>YARR_1</title>
+  <link rel="icon" href="data:,">
+  <style>
+    /* 2026-10-07 웹판 — 창 크기에 맞춰 꽉 채운다. 비율은 게임이 직접 지키고(1920x1080 균등 배율),
+       남는 부분은 레터박스로 칠한다. 페이지 바깥은 검정. */
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; touch-action: none; }
+    #unity-canvas { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; width: 100dvw; height: 100dvh; display: block; background: #000; outline: none; }
+    #yarr-loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; color: #ccc; font: 500 16px sans-serif; background: #000; z-index: 3; }
+    /* 폰을 세로로 들면 안내 — 웹은 화면 방향을 고정할 수 없다 */
+    #yarr-rotate { display: none; position: fixed; inset: 0; background: #000; color: #fff; font: 600 20px sans-serif;
+                   align-items: center; justify-content: center; text-align: center; z-index: 10; }
+    @media (orientation: portrait) and (pointer: coarse) { #yarr-rotate { display: flex; } }
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <div id="yarr-loading">불러오는 중 0%</div>
+  <div id="yarr-rotate">화면을 가로로 돌려주세요</div>
+  <script>
+    const notify = (type, extra = {}) => {
+      if (window.parent !== window) window.parent.postMessage({source:'8akeryy-game', type, ...extra}, window.location.origin);
+    };
+    document.addEventListener('keydown', event => { if(event.key === 'Escape') notify('escape'); });
+    var buildUrl = "Build";
+    var config = {
+      arguments: [],
+      dataUrl: buildUrl + "/webgl_test.data.br",
+      frameworkUrl: buildUrl + "/webgl_test.framework.js.br",
+      codeUrl: buildUrl + "/webgl_test.wasm.br",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "DefaultCompany",
+      productName: "YARR_1",
+      productVersion: "1.0",
+    };
+    var loading = document.querySelector("#yarr-loading");
+    var script = document.createElement("script");
+    script.src = buildUrl + "/webgl_test.loader.js";
+    script.onload = function () {
+      createUnityInstance(document.querySelector("#unity-canvas"), config, function (p) {
+        loading.textContent = "불러오는 중 " + Math.round(p * 100) + "%";
+        notify("progress", {progress:p});
+      }).then(function () {
+        loading.style.display = "none";
+        notify("ready");
+      }).catch(function (m) {
+        loading.textContent = "불러오지 못했습니다: " + m;
+        notify("error");
+      });
+    };
+    script.onerror = function () { loading.textContent = "게임 파일을 불러오지 못했어요."; notify("error"); };
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>

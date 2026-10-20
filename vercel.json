@@ -2,6 +2,54 @@
   "functions": {
     "api/transform.js": {
       "maxDuration": 300
+    },
+    "api/letter-wall.js": {
+      "maxDuration": 60
+    },
+    "api/showcase.js": {
+      "maxDuration": 300,
+      "includeFiles": "booth/assets/{mock_preset,mock_apply}.jpg"
     }
-  }
+  },
+  "headers": [
+    {
+      "source": "/showcase/game/Build/webgl_test.js.br",
+      "headers": [
+        {
+          "key": "Content-Encoding",
+          "value": "br"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        }
+      ]
+    },
+    {
+      "source": "/showcase/game/Build/webgl_test.wasm.br",
+      "headers": [
+        {
+          "key": "Content-Encoding",
+          "value": "br"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/wasm"
+        }
+      ]
+    },
+    {
+      "source": "/showcase/game/Build/webgl_test.data.br",
+      "headers": [
+        {
+          "key": "Content-Encoding",
+          "value": "br"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/octet-stream"
+        }
+      ]
+    }
+  ]
 }
