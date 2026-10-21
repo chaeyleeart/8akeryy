@@ -4,7 +4,7 @@
 <meta name="theme-color" content="#ffffff"><title>기다릴게, 이름을 · AI 크리에이터쇼 · 8akeryy</title>
 <meta name="description" content="아이들에게 행복한 하루를 선물해주세요. 설문, 게임, 편지로 이어지는 8akeryy 전시 체험. AI 포토부스는 별도로 이용해요.">
 <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="showcase.css?v=20261021-1"><script src="showcase.js?v=20261021-1" defer></script>
+<link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="showcase.css?v=20261021-2"><script src="showcase.js?v=20261021-2" defer></script>
 </head><body>
 <a class="skip" href="#experience">체험으로 이동</a>
 <header class="nav"><a class="logo" href="../index.html"><img src="../brand/mainlogo.png" alt="8akeryy"></a><nav class="menu" id="site-menu" aria-label="사이트 메뉴"><a href="../index.html">홈</a><a href="../archive.html">프로젝트 아카이브</a><a href="../gallery.html">갤러리</a><a class="active" href="./" aria-current="page">AI 크리에이터쇼</a></nav><a class="nav-cta" href="mailto:8akeryy@gmail.com">문의하기</a><button class="nav-toggle" aria-label="메뉴 열기" aria-controls="site-menu" aria-expanded="false">☰</button></header>
@@ -41,12 +41,15 @@
 <p class="hint">게임을 마치면 편지로 이동해주세요.<br>다른 단계로 이동하면 게임이 종료되고, 다시 들어오면 처음부터 시작해요.</p>
 </section>
 <section id="letter" class="panel letter-panel" hidden><p class="eyebrow">03 · 나가는 길</p><h2 id="letter-title" tabindex="-1">마음 가는 대로,<br>편지 한 통</h2><p class="sub">짧은 안부도, 문득 떠오른 기억도.<br>누구에게든, 어떤 이야기든 자유롭게 남겨주세요.</p>
-<form id="letter-form"><div class="letter-paper"><textarea id="letter-message" required maxlength="500" placeholder="여기에 두고 싶은 마음을 자유롭게 적어주세요…" aria-label="자유롭게 편지 쓰기" rows="8"></textarea></div><p id="letter-count" class="hint">0 / 500</p>
-<label class="consent" id="letter-consent-wrap"><input type="checkbox" id="letter-consent"><span>이 편지를 편지 벽에 붙여, 다른 관람객도 읽을 수 있게 공개할게요.</span></label><p id="letter-service" class="hint"></p><p id="letter-error" role="status"></p><button class="primary" type="submit" id="submit-letter">나만 간직하기 ♡</button></form>
-<div id="letter-done" hidden><div class="finished-paper"><img src="assets/letter-paper.png" alt="8akeryy 원본 편지지"><div><p id="finished-message"></p></div></div><p id="letter-storage-status" class="sub" role="status"></p><div class="photo-actions"><button class="secondary" id="save-letter">편지 이미지 저장 ↓</button><button class="secondary" id="save-letter-text">텍스트 저장 ↓</button></div><button class="secondary" id="view-posted-letter" data-open-archive hidden>벽에 붙인 내 편지 보기 →</button><button class="text-button" id="edit-letter">다시 읽고 수정하기</button><button class="primary" id="finish">우리의 하루 마치기 →</button></div>
+<form id="letter-form" autocomplete="off"><div class="letter-paper"><textarea id="letter-message" autocomplete="off" spellcheck="false" required maxlength="500" placeholder="여기에 두고 싶은 마음을 자유롭게 적어주세요…" aria-label="자유롭게 편지 쓰기" rows="8"></textarea></div><p id="letter-count" class="hint">0 / 500</p>
+<fieldset class="letter-destinations"><legend>마음을 어디로 보낼까요?</legend>
+<label class="letter-destination"><input type="radio" name="letter-destination" value="wall" id="letter-public" required><span><strong>벽에 붙이기</strong><small>공개 동의 · 다른 관람객도 읽을 수 있어요.</small></span></label>
+<label class="letter-destination"><input type="radio" name="letter-destination" value="rainbow" id="letter-private" required><span><strong>무지개마을로 보내기</strong><small>나만 보기 · 이번 체험에서만 읽고, 마치면 사라져요.</small></span></label>
+</fieldset><p id="letter-service" class="hint" role="status"></p><p id="letter-error" role="status"></p><button class="primary" type="submit" id="submit-letter">보낼 곳을 선택해주세요</button></form>
+<div id="letter-done" hidden><div class="finished-paper"><img src="assets/letter-paper.png" alt="8akeryy 원본 편지지"><div><p id="finished-message"></p></div></div><p id="letter-storage-status" class="sub" role="status"></p><button class="secondary" id="view-posted-letter" data-open-archive hidden>벽에 붙인 내 편지 보기 →</button><button class="text-button" id="edit-letter">다시 읽고 수정하기</button><button class="primary" id="finish">우리의 하루 마치기 →</button></div>
 <aside class="archive-invitation"><div><p class="eyebrow">LETTER ARCHIVE · 2026.08</p><h3>여기에 두고 간 마음.</h3><p>지난 쇼케이스의 89편과 새로 붙인 편지들.<br>다른 이들의 마음도 천천히 읽어보세요.</p><button type="button" class="secondary" data-open-archive>남겨진 마음 둘러보기 ↗</button></div><img src="../characters/brown_front.png" alt="" loading="lazy"></aside>
 </section>
-<section id="ending" class="panel ending" hidden><p class="eyebrow">8AKERYY · 기다릴게, 이름을</p><img id="ending-image" class="friend-portrait" alt=""><h2 id="ending-title" tabindex="-1">오늘 하루, 행복한 시간을<br>선물해줘서 고마워.</h2><p class="sub">당신이 이름을 불러주는 순간,<br>기다림이 시작됩니다.</p><button id="back-letter" class="secondary">내 편지 다시 보기</button><button id="restart" class="text-button">다음 관람객을 위해 처음으로</button><p class="hint">처음으로 돌아가면 이 기기의 설문과 편지 내용이 비워져요.<br>벽에 공개한 편지는 아카이브에 남아요.</p></section>
+<section id="ending" class="panel ending" hidden><p class="eyebrow">8AKERYY · 기다릴게, 이름을</p><img id="ending-image" class="friend-portrait" alt=""><h2 id="ending-title" tabindex="-1">오늘 하루, 행복한 시간을<br>선물해줘서 고마워.</h2><p class="sub">당신이 이름을 불러주는 순간,<br>기다림이 시작됩니다.</p><button id="restart" class="text-button">다음 관람객을 위해 처음으로</button><p class="hint">체험을 마치면 이 기기의 편지 내용은 비워져요.<br>벽에 공개한 편지는 아카이브에 남아요.</p></section>
 </section>
 <div class="archive-entry"><a class="text-button" href="photobooth.html">별도 AI 포토부스 →</a><button type="button" class="text-button" data-open-photos>지난 전시 사진 둘러보기 →</button><button type="button" class="text-button" data-open-archive>편지 벽 둘러보기 →</button></div>
 <aside class="film-note"><b>베이커리의 이야기도 만나보세요.</b><p>애니메이션 「기다릴게, 이름을」은 전시장 화면에서 반복 상영됩니다.</p></aside>

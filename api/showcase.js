@@ -9,7 +9,7 @@ const fail = (res, status, message) => res.status(status).json({ message });
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
-  if (req.method === 'GET') return res.status(200).json({ photo: photoReady(), letters: lettersReady() });
+  if (req.method === 'GET') return res.status(200).json({ photo: photoReady(), letters: lettersReady() || !!process.env.BLOB_READ_WRITE_TOKEN });
   if (req.method !== 'POST') { res.setHeader('Allow', 'GET, POST'); return fail(res, 405, '지원하지 않는 요청이에요.'); }
   const origin = req.headers.origin;
   if (origin && !['https://www.8akeryy.com', 'https://8akeryy.com', 'https://8akeryy.vercel.app'].includes(origin)) {

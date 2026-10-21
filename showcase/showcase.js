@@ -38,15 +38,18 @@ const QUESTIONS = [
 const REACTIONS = ["그렇구나~", "오~ 좋다!", "응응, 알 것 같아", "좋은데?", "오호 그렇단 말이지~", "점점 더 알 것 같아!", "거의 다 왔어!", "마지막까지 고마워!"];
 const $=id=>document.getElementById(id), KEY='8akeryy.showcase.2026.v2';
 const uuid=()=>typeof crypto.randomUUID==='function'?crypto.randomUUID():'10000000-1000-4000-8000-100000000000'.replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16));
-const fresh=()=>({answers:[],dog:null,step:0,unlocked:0,introduced:false,message:'',letterDone:false,receipt:null,wallReceipt:null,wallMode:null,letterId:uuid()});
+const fresh=()=>({answers:[],dog:null,step:0,unlocked:0,introduced:false,message:'',destination:null,letterDone:false,receipt:null,wallReceipt:null,wallMode:null,letterId:uuid()});
 let state=fresh(), services={letters:false}, stage='intro', sequence=0, sceneTimer, reactionTimer, greetingIndex=0, letterBusy=false;
 try{const saved=JSON.parse(sessionStorage.getItem(KEY));if(saved&&Array.isArray(saved.answers)&&saved.answers.length<=QUESTIONS.length&&saved.answers.every(a=>['dal','kong','byul'].includes(a))){
 state.answers=saved.answers;state.introduced=saved.introduced===true;state.dog=state.answers.length===QUESTIONS.length?winner():null;
 state.unlocked=state.dog?(Number(saved.unlocked)>=2?3:1):0;state.step=Math.max(0,Math.min(state.unlocked,Number(saved.step)||0));
-state.message=typeof saved.message==='string'?saved.message.slice(0,500):'';state.receipt=typeof saved.receipt==='string'?saved.receipt:null;state.wallReceipt=typeof saved.wallReceipt==='string'?saved.wallReceipt:null;state.wallMode=saved.wallMode==='local'?'local':'live';state.letterDone=saved.letterDone===true&&!!state.message.trim();state.letterId=/^[0-9a-f-]{36}$/.test(saved.letterId||'')?saved.letterId:uuid();}}
+}}
 catch{}
 if(state.step===2)state.step=3;
-function persist(){try{sessionStorage.setItem(KEY,JSON.stringify(state));return true;}catch{return false;}}
+// The shared tablet never persists a visitor's letter or receipt.
+function persist(){try{const {answers,dog,step,unlocked,introduced}=state;sessionStorage.setItem(KEY,JSON.stringify({answers,dog,step,unlocked,introduced}));return true;}catch{return false;}}
+persist();
+
 function winner(){const scores={dal:0,kong:0,byul:0};state.answers.forEach(a=>scores[a]++);const max=Math.max(...Object.values(scores));return [...state.answers].reverse().find(a=>scores[a]===max);}
 const asset=path=>'../matching/'+path;
 const focus=id=>$(id).focus({preventScroll:true});
@@ -121,56 +124,48 @@ function think(){stage='think';surveyPane('thinking');focus('thinking-title');sc
 function renderResult(){stage='result';scene('idle');surveyPane('match-result');const d=DOGS[state.dog];$('result-image').src=asset(d.img);$('result-image').alt=d.name;$('result-name').textContent=d.name;$('result-tag').textContent=d.tag;$('result-description').textContent=d.intro;$('result-line').textContent=d.line;focus('result-name');}
 $('previous-question').addEventListener('click',()=>{if(stage!=='questions')return;state.answers.pop();persist();renderQuestions();});
 $('start').addEventListener('click',()=>showStep(state.step));document.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>showStep(Number(b.dataset.step))));document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>next(Number(b.dataset.next))));$('skip-game').addEventListener('click',()=>next(3));
-$('home').addEventListener('click',()=>{if(letterBusy)return;stopGame();resetScene();$('bgm').pause();$('sound').setAttribute('aria-pressed','false');$('sound').textContent='소리 켜기 ♫';document.body.classList.remove('in-experience');$('experience').hidden=true;$('welcome').hidden=false;$('journey').hidden=false;$('start').textContent=state.introduced||state.answers.length?'우리의 하루 이어가기 →':'베이커리 문 열기 →';window.scrollTo({top:0});});
+$('home').addEventListener('click',()=>{if(letterBusy)return;clearLetter();stopGame();resetScene();$('bgm').pause();$('sound').setAttribute('aria-pressed','false');$('sound').textContent='소리 켜기 ♫';document.body.classList.remove('in-experience');$('experience').hidden=true;$('welcome').hidden=false;$('journey').hidden=false;$('start').textContent=state.introduced||state.answers.length?'우리의 하루 이어가기 →':'베이커리 문 열기 →';window.scrollTo({top:0});});
 $('sound').addEventListener('click',async()=>{const audio=$('bgm');if(!audio.paused){audio.pause();$('sound').setAttribute('aria-pressed','false');$('sound').textContent='소리 켜기 ♫';return;}try{audio.volume=.25;await audio.play();$('sound').setAttribute('aria-pressed','true');$('sound').textContent='소리 끄기 ♫';}catch{$('sound').textContent='소리를 재생하지 못했어요';}});
 document.querySelector('.nav-toggle').addEventListener('click',function(){const open=document.querySelector('.menu').classList.toggle('open');this.setAttribute('aria-expanded',String(open));this.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');});
-async function getServices(){try{const r=await fetch('/api/showcase',{signal:AbortSignal.timeout(8000)});if(r.ok){const d=await r.json();services.letters=d.letters===true;}}catch{}$('letter-consent-wrap').hidden=!services.letters;if(!services.letters){$('letter-consent').checked=false;$('submit-letter').textContent='나만 간직하기 ♡';$('letter-service').textContent='지금은 이 기기에 편지를 간직할 수 있어요. 벽에 붙이기는 준비 중이에요.';}updateControls();}
-$('letter-service').textContent=location.hostname==='127.0.0.1'||location.hostname==='localhost'?'벽에 붙인 편지는 이 컴퓨터의 미리보기 아카이브에 저장돼요.':'벽에 붙이면 다른 관람객도 편지를 읽을 수 있어요. 나만 간직할 수도 있어요.';
+async function getServices(){try{const r=await fetch('/api/showcase',{signal:AbortSignal.timeout(8000)});if(r.ok){const d=await r.json();services.letters=d.letters===true;}}catch{}$('letter-service').textContent=services.letters?'대여 기기에는 편지를 저장하지 않아요.':'편지 벽 연결을 확인 중이에요. 공개 전송에 실패하면 글을 유지하고 다시 시도할 수 있어요.';}
 getServices();
-const image=url=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('image'));img.src=url;});
 function updateControls(){$('home').disabled=letterBusy;$('reset-visit').disabled=letterBusy;updateProgress();}
-function download(blob,name){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000);}
-async function saveBlob(blob,name){const file=new File([blob],name,{type:blob.type});if(navigator.canShare?.({files:[file]})){try{await navigator.share({files:[file]});return;}catch(e){if(e.name==='AbortError')return;}}download(blob,name);}
 function renderLetter(){$('letter-message').value=state.message;$('letter-count').textContent=`${state.message.length} / 500`;$('letter-form').hidden=state.letterDone;$('letter-done').hidden=!state.letterDone;
-$('view-posted-letter').hidden=!state.wallReceipt;if(state.letterDone){$('finished-message').textContent=state.message;$('letter-storage-status').textContent=state.wallReceipt?(state.wallMode==='local'?'미리보기 편지 벽에 붙였어요. 벽에서 내 편지를 만나보세요.':'편지 벽에 붙였어요. 다른 관람객도 이 마음을 읽을 수 있어요.'):state.receipt?'전시팀에 편지를 남겼어요. 이 마음을 이미지로도 간직해보세요.':persist()?'편지를 이 탭에 보관했어요. 탭을 닫기 전에 이미지나 텍스트로 저장해주세요.':'임시 보관을 사용할 수 없어요. 편지를 이미지나 텍스트로 저장해주세요.';}}
+ $('view-posted-letter').hidden=!state.wallReceipt;
+ if(state.letterDone){$('finished-message').textContent=state.message;$('letter-storage-status').textContent=state.wallReceipt?'편지 벽에 붙였어요. 다른 관람객도 이 마음을 읽을 수 있어요.':'무지개마을로 마음을 띄웠어요. 이 편지는 지금 나만 볼 수 있고, 체험을 마치면 사라져요.';}
+}
+function updateDestination(){state.destination=$('letter-public').checked?'wall':$('letter-private').checked?'rainbow':null;$('submit-letter').textContent=state.destination==='wall'?'공개 동의하고 벽에 붙이기 ♡':state.destination==='rainbow'?'무지개마을로 보내기 ♡':'보낼 곳을 선택해주세요';}
+$('letter-public').addEventListener('change',updateDestination);$('letter-private').addEventListener('change',updateDestination);
 $('letter-message').addEventListener('input',()=>{state.message=$('letter-message').value;$('letter-count').textContent=`${state.message.length} / 500`;$('letter-message').setCustomValidity('');persist();});
-$('letter-consent').addEventListener('change',()=>{$('submit-letter').textContent=$('letter-consent').checked?'벽에 붙이기 ♡':'나만 간직하기 ♡';});
-$('letter-form').addEventListener('submit',async event=>{event.preventDefault();if(letterBusy)return;if(!state.message.trim()){$('letter-message').setCustomValidity('남기고 싶은 이야기를 적어주세요.');$('letter-message').reportValidity();return;}
-$('letter-error').textContent='';if($('letter-consent').checked){letterBusy=true;$('submit-letter').disabled=true;$('letter-message').disabled=true;$('letter-consent').disabled=true;updateControls();
-try{const r=await fetch('/api/letter-wall',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:state.letterId,message:state.message,consent:true}),signal:AbortSignal.timeout(20000)});const d=await r.json();if(!r.ok||!d.receipt)throw new Error(d.message||'편지를 보내지 못했어요.');state.wallReceipt=d.receipt;state.wallMode=d.mode==='local'?'local':'live';}
-catch(e){$('letter-error').textContent=(e.message||'편지 벽에 연결하지 못했어요.')+' 글은 유지돼요. 다시 시도하거나 공개 선택을 해제하고 나만 간직할 수 있어요.';return;}
-finally{letterBusy=false;$('submit-letter').disabled=false;$('letter-message').disabled=false;$('letter-consent').disabled=false;updateControls();}}
-state.letterDone=true;persist();renderLetter();$('save-letter').focus({preventScroll:true});$('letter').scrollIntoView({block:'start'});});
-$('edit-letter').addEventListener('click',()=>{if(state.receipt||state.wallReceipt){state.letterId=uuid();state.receipt=null;state.wallReceipt=null;$('letter-error').textContent='이미 남긴 편지는 유지돼요. 수정해서 붙이면 새 편지로 남아요.';}state.letterDone=false;persist();renderLetter();$('letter-message').focus({preventScroll:true});$('letter').scrollIntoView({block:'start'});});
-$('save-letter-text').addEventListener('click',()=>download(new Blob([`${state.message}\n\n8akeryy · 기다릴게, 이름을`],{type:'text/plain;charset=utf-8'}),'8akeryy-letter.txt'));
-$('save-letter').addEventListener('click',async()=>{
-const button=$('save-letter');button.disabled=true;
-try {
- await document.fonts.load('40px LetterPen');
- const [paper,clean]=await Promise.all([image('assets/letter-paper.png'),image('assets/letter-paper-clean.png')]), canvas=document.createElement('canvas');
- canvas.width=1000;canvas.height=1250;const ctx=canvas.getContext('2d');
- let size=40,lines=[],lineHeight=52;
- const wrap=()=>{lines=[];ctx.font=`${size}px LetterPen, sans-serif`;for(const paragraph of state.message.split('\n')){let row='';for(const char of paragraph){if(ctx.measureText(row+char).width>730){lines.push(row);row=char;}else row+=char;}lines.push(row);}};
- do {lineHeight=size*1.3;wrap();if(lines.length*lineHeight<=700)break;size-=2;}while(size>=18);
- ctx.drawImage(paper,0,0,1000,1250);ctx.save();ctx.beginPath();ctx.rect(110,375,790,787);ctx.clip();ctx.drawImage(clean,0,0,1000,1250);ctx.restore();ctx.fillStyle='#493c2d';
- ctx.font=`${size}px LetterPen, sans-serif`;lines.forEach((line,i)=>ctx.fillText(line,135,410+i*lineHeight));
-
- const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw new Error('save');await saveBlob(blob,'8akeryy-letter.png');
-} catch {$('letter-storage-status').textContent='이미지를 저장하지 못했어요. 텍스트 저장을 이용하거나 다시 시도해주세요.';}
-finally {button.disabled=false;}
+$('letter-form').addEventListener('submit',async event=>{
+ event.preventDefault();if(letterBusy)return;updateDestination();
+ if(!state.message.trim()){$('letter-message').setCustomValidity('남기고 싶은 이야기를 적어주세요.');$('letter-message').reportValidity();return;}
+ if(!state.destination){$('letter-private').reportValidity();return;}
+ $('letter-error').textContent='';
+ if(state.destination==='wall'){
+  letterBusy=true;$('submit-letter').disabled=true;$('letter-message').disabled=true;$('letter-public').disabled=true;$('letter-private').disabled=true;updateControls();
+  try{const r=await fetch('/api/letter-wall',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:state.letterId,message:state.message,consent:true}),signal:AbortSignal.timeout(20000)});const d=await r.json();if(!r.ok||!d.receipt||!d.letter)throw new Error(d.message||'편지를 붙이지 못했어요.');state.wallReceipt=d.receipt;state.wallMode=d.mode==='local'?'local':'live';lastPostedLetter=d.letter;}
+  catch(e){$('letter-error').textContent=(e.message||'편지 벽에 연결하지 못했어요.')+' 글은 그대로 있어요. 다시 시도해주세요.';return;}
+  finally{letterBusy=false;$('submit-letter').disabled=false;$('letter-message').disabled=false;$('letter-public').disabled=false;$('letter-private').disabled=false;updateControls();}
+ }
+ state.letterDone=true;renderLetter();$('finish').focus({preventScroll:true});$('letter').scrollIntoView({block:'start'});
+ if(state.wallReceipt)openArchive('letters',$('view-posted-letter'));
 });
-$('finish').addEventListener('click',()=>{$('letter').hidden=true;$('ending').hidden=false;document.body.dataset.stage='ending';focus('ending-title');$('experience').scrollIntoView({block:'start'});});$('back-letter').addEventListener('click',()=>showStep(3));
-function resetVisit(){if(letterBusy)return;stopGame();resetScene();$('bgm').pause();$('sound').setAttribute('aria-pressed','false');$('sound').textContent='소리 켜기 ♫';state=fresh();$('letter-message').value='';$('finished-message').textContent='';$('letter-consent').checked=false;$('submit-letter').textContent='나만 간직하기 ♡';$('letter-error').textContent='';persist();document.body.classList.remove('in-experience');$('experience').hidden=true;$('welcome').hidden=false;$('journey').hidden=false;$('start').textContent='베이커리 문 열기 →';window.scrollTo({top:0});$('start').focus({preventScroll:true});}
+$('edit-letter').addEventListener('click',()=>{if(state.receipt||state.wallReceipt){state.letterId=uuid();state.receipt=null;state.wallReceipt=null;$('letter-error').textContent='이미 남긴 편지는 유지돼요. 수정해서 붙이면 새 편지로 남아요.';}state.letterDone=false;persist();renderLetter();$('letter-message').focus({preventScroll:true});$('letter').scrollIntoView({block:'start'});});
+function clearLetter(){state.message='';state.destination=null;state.letterDone=false;state.receipt=null;state.wallReceipt=null;state.wallMode=null;state.letterId=uuid();lastPostedLetter=null;$('letter-form').reset();$('finished-message').textContent='';$('letter-storage-status').textContent='';$('letter-error').textContent='';$('letter-count').textContent='0 / 500';updateDestination();persist();}
+$('finish').addEventListener('click',()=>{clearLetter();$('letter').hidden=true;$('ending').hidden=false;document.body.dataset.stage='ending';focus('ending-title');$('experience').scrollIntoView({block:'start'});});
+function resetVisit(){if(letterBusy)return;stopGame();resetScene();$('bgm').pause();$('sound').setAttribute('aria-pressed','false');$('sound').textContent='소리 켜기 ♫';state=fresh();clearLetter();document.body.classList.remove('in-experience');$('experience').hidden=true;$('welcome').hidden=false;$('journey').hidden=false;$('start').textContent='베이커리 문 열기 →';window.scrollTo({top:0});$('start').focus({preventScroll:true});}
 $('restart').addEventListener('click',resetVisit);
 $('reset-visit').addEventListener('click',()=>{if(confirm('새 체험을 시작할까요? 이 기기의 설문과 작성한 편지가 비워져요. 벽에 공개한 편지는 남아요.'))resetVisit();});
-const archiveDialog=$('archive-dialog');let archiveTrigger=null;
+const archiveDialog=$('archive-dialog');let archiveTrigger=null,lastPostedLetter=null;
 function openArchive(kind,button){
  archiveTrigger=button;persist();
  $('archive-title').textContent=kind==='photos'?'그날의 손님들 · 사진 아카이브':'남겨진 마음 · 편지 아카이브';
  const frame=$('archive-frame');frame.title=kind==='photos'?'지난 전시의 AI 기념사진':'함께 남긴 편지 벽';
- frame.src=kind==='photos'?'photos/':`letters/?refresh=${Date.now()}${state.wallReceipt?'#'+state.wallReceipt:''}`;
+ frame.dataset.kind=kind;frame.src=kind==='photos'?'photos/':`letters/?refresh=${Date.now()}${state.wallReceipt?'#'+state.wallReceipt:''}`;
  archiveDialog.showModal();document.body.classList.add('archive-open');
 }
+$('archive-frame').addEventListener('load',()=>{const frame=$('archive-frame');if(frame.dataset.kind==='letters'&&lastPostedLetter)frame.contentWindow.postMessage({source:'8akeryy-showcase',type:'letter-posted',letter:lastPostedLetter},location.origin);});
 document.querySelectorAll('[data-open-archive]').forEach(button=>button.addEventListener('click',()=>openArchive('letters',button)));
 document.querySelectorAll('[data-open-photos]').forEach(button=>button.addEventListener('click',()=>openArchive('photos',button)));
 $('close-archive').addEventListener('click',()=>archiveDialog.close());
@@ -179,5 +174,6 @@ window.addEventListener('message',event=>{
  if(event.origin===location.origin&&event.source===$('archive-frame').contentWindow&&event.data?.source==='8akeryy-archive'&&event.data.type==='close')archiveDialog.close();
 });
 if(state.answers.length||state.introduced)$('start').textContent='우리의 하루 이어가기 →';
-window.addEventListener('pagehide',()=>{$('bgm').pause();$('scene-video').pause();});
+window.addEventListener('pagehide',()=>{$('bgm').pause();$('scene-video').pause();clearLetter();});
+window.addEventListener('pageshow',event=>{if(event.persisted){clearLetter();if(state.step===3)renderLetter();}});
 })();

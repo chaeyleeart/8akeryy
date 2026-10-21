@@ -1,4 +1,5 @@
-// Only explicit wall submissions are exposed. The private letter inbox is never listed.
+// Only explicitly consented wall submissions are stored here. Rainbow letters never reach this API.
+// The existing public photo store may hold these public letters under a separate prefix.
 const PREFIX = 'showcase/2026/wall/';
 const validId = value => typeof value === 'string' && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
 const publicLetter = value => value?.consent?.publish === true && validId(value.id) &&
@@ -12,12 +13,14 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'GET, POST');
     return res.status(405).json({ message: '지원하지 않는 요청이에요.' });
   }
-  const token = process.env.SHOWCASE_LETTERS_BLOB_READ_WRITE_TOKEN;
-  if (!token) return res.status(503).json({ available: false, message: '편지 벽 저장 연결을 준비하고 있어요. 우선 나만 간직할 수 있어요.' });
+  const privateToken = process.env.SHOWCASE_LETTERS_BLOB_READ_WRITE_TOKEN;
+  const token = privateToken || process.env.BLOB_READ_WRITE_TOKEN;
+  const access = privateToken ? 'private' : 'public';
+  if (!token) return res.status(503).json({ available: false, message: '편지 벽 저장 연결을 준비하고 있어요. 잠시 후 다시 시도해주세요.' });
   try {
     const { list, get, put } = await import('@vercel/blob');
     const read = async path => {
-      const result = await get(path, { access: 'private', token, useCache: false });
+      const result = await get(path, { access, token, useCache: false });
       return result?.statusCode === 200 ? new Response(result.stream).json() : null;
     };
     if (req.method === 'GET') {
@@ -52,7 +55,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ receipt: body.id, mode: 'live', letter: publicLetter(existing) });
     }
     try {
-      await put(path, JSON.stringify(record), { token, access: 'private', contentType: 'application/json', addRandomSuffix: false, allowOverwrite: false });
+      await put(path, JSON.stringify(record), { token, access, contentType: 'application/json', addRandomSuffix: false, allowOverwrite: false });
     } catch (error) {
       // An identical retry may have won the create race; never overwrite another letter.
       const saved = await read(path);

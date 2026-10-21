@@ -23,23 +23,29 @@ el('wall').onclick=e=>{const button=e.target.closest('[data-open]');if(!button)r
 el('close').onclick=()=>el('detail').close();el('detail').addEventListener('close',()=>lastTrigger?.focus());el('detail').addEventListener('keydown',e=>{if(e.key==='Escape')e.stopPropagation();});el('detail').addEventListener('click',e=>{if(e.target===el('detail')){const b=el('detail').getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)el('detail').close();}});
 let oldWidth=0;new ResizeObserver(entries=>{const width=entries[0].contentRect.width;if(Math.abs(width-oldWidth)>.5){oldWidth=width;arrange();}}).observe(el('wall'));window.addEventListener('resize',fitAll);render();choose(font);
 
+function mergeLetters(rows){
+ const incoming=[];
+ for(const row of rows){if(typeof row.id==='string'&&/^[a-f0-9-]{36}$/i.test(row.id)&&typeof row.display_text==='string'&&row.display_text.trim()&&row.display_text.length<=500&&!byId.has(row.id)){const clean={id:row.id,display_text:row.display_text,createdAt:typeof row.createdAt==='string'?row.createdAt:''};byId.set(clean.id,clean);incoming.push(clean);}}
+ if(incoming.length){data.letters.unshift(...incoming);data.letters.sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));data.total=data.letters.length;render();}
+ const added=data.letters.length-89;el('wall-status').textContent=added?`지난 편지 89편 · 새로 붙인 마음 ${added}편`:'';
+}
+function highlightLetter(id){const card=[...el('wall').querySelectorAll('.letter-card')].find(c=>c.dataset.id===id);if(card){card.classList.add('just-posted');card.scrollIntoView({block:'center'});}}
+let loading=false,highlighted=false;
 async function loadWall(){
- const incoming=[];let cursor=null;
+ if(loading)return;loading=true;const incoming=[];let cursor=null;
  try{
   do{
    const response=await fetch('/api/letter-wall'+(cursor?'?cursor='+encodeURIComponent(cursor):''),{cache:'no-store',signal:AbortSignal.timeout(20000)});
-   if(!response.ok)throw new Error('load');
-   const page=await response.json();
-   for(const row of page.letters||[]){if(typeof row.id==='string'&&/^[a-f0-9-]{36}$/i.test(row.id)&&typeof row.display_text==='string'&&row.display_text.length<=500&&!byId.has(row.id)){byId.set(row.id,row);incoming.push(row);}}
-   cursor=page.cursor||null;
+   if(!response.ok)throw new Error('load');const page=await response.json();incoming.push(...(page.letters||[]));cursor=page.cursor||null;
   }while(cursor);
-  incoming.sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
-  data.letters.unshift(...incoming);data.total=data.letters.length;render();
-  el('wall-status').textContent=incoming.length?`지난 편지 89편 · 새로 붙인 마음 ${incoming.length}편`:'';
-  const target=decodeURIComponent(location.hash.slice(1));
-  if(target&&byId.has(target)){const card=[...el('wall').querySelectorAll('.letter-card')].find(c=>c.dataset.id===target);card?.classList.add('just-posted');card?.scrollIntoView({block:'center'});}
+  mergeLetters(incoming);
+  const target=decodeURIComponent(location.hash.slice(1));if(!highlighted&&target&&byId.has(target)){highlightLetter(target);highlighted=true;}
  }catch{el('wall-status').textContent='지난 편지 89편을 먼저 보여드려요. 새 편지는 연결 후 다시 확인해주세요.';}
+ finally{loading=false;}
 }
-loadWall();
+window.addEventListener('message',event=>{if(parent===window||event.source!==parent||event.origin!==location.origin||event.data?.source!=='8akeryy-showcase'||event.data.type!=='letter-posted')return;const row=event.data.letter;if(!row||typeof row!=='object')return;mergeLetters([row]);if(byId.has(row.id)){highlightLetter(row.id);highlighted=true;}});
+loadWall();setInterval(()=>{if(!document.hidden)loadWall();},10000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadWall();});
+
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!el('detail').open&&window.parent!==window){window.parent.postMessage({source:'8akeryy-archive',type:'close'},location.origin);}});
 })();

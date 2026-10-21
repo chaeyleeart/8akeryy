@@ -95,3 +95,11 @@ h2[tabindex='-1']:focus{outline:none}
  .ending{max-width:800px;padding:24px}.ending .friend-portrait{width:110px;height:110px;margin:0 auto 10px}.ending h2{font-size:28px;margin:10px 0}
 }
 @media(max-width:600px){.journey ol{grid-template-columns:1fr;gap:18px}.journey li{padding:0;border:0}.journey li small{font-size:12px}.experience-top>div{display:flex}}
+
+.letter-destinations{border:0;padding:0;margin:16px 0 0;text-align:left;display:grid;gap:10px}
+.letter-destinations legend{font-size:13px;font-weight:700;padding:0;margin-bottom:10px}
+.letter-destination{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;min-height:70px;background:#fff}
+.letter-destination:has(input:checked){background:#f8edf0;border-color:#ad838e}.letter-destination:has(input:focus-visible){outline:3px solid #64796a;outline-offset:3px}
+.letter-destination input{width:20px;height:20px;flex:none;accent-color:var(--ink)}.letter-destination strong{display:block;font-size:15px}.letter-destination small{display:block;font-size:11px;line-height:1.6;margin-top:4px;color:#75694e}
+#letter-done #finish{margin-top:16px}#letter-service{font-size:11px}
+@media(min-width:900px) and (orientation:landscape){.letter-destinations{grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.letter-destination{padding:10px;gap:8px}.letter-destination strong{font-size:13px}.letter-destination small{font-size:10px}.letter-destinations legend{margin-bottom:6px}.letter-panel .letter-paper{min-height:275px;padding-top:22%;padding-bottom:5%}.letter-panel .letter-paper textarea{height:140px;min-height:140px}.letter-panel #letter-count{margin:4px 0}.letter-panel #letter-service{margin:5px 0}}
