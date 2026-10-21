@@ -52,5 +52,6 @@
       ]
     }
   ],
-  "buildCommand": "node scripts/verify-letter-storage.mjs"
+  "buildCommand": "node scripts/verify-letter-storage.mjs",
+  "outputDirectory": "."
 }
