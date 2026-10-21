@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff"><title>AI 포토부스 · 8akeryy</title>
+<meta name="description" content="강아지들 사이, 나만의 AI 기념사진을 만드는 8akeryy 포토부스.">
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="showcase.css?v=20261020-6"><script src="photobooth.js?v=20261021-1" defer></script>
+<link rel="stylesheet" href="photobooth.css?v=20261021-1"></head><body class="photobooth-page">
+<a class="skip" href="#photo">체험으로 이동</a>
+<header class="nav"><a class="logo" href="../index.html"><img src="../brand/mainlogo.png" alt="8akeryy"></a><nav class="menu" id="site-menu" aria-label="사이트 메뉴"><a href="../index.html">홈</a><a href="../archive.html">프로젝트 아카이브</a><a href="../gallery.html">갤러리</a><a class="active" href="./" aria-current="page">AI 크리에이터쇼</a></nav><a class="nav-cta" href="mailto:8akeryy@gmail.com">문의하기</a><button class="nav-toggle" aria-label="메뉴 열기" aria-controls="site-menu" aria-expanded="false">☰</button></header>
+<main class="showcase-main"><p class="booth-back"><a href="./">← 전시 체험으로</a></p><section id="photo" class="panel photobooth-panel"><p class="eyebrow">8AKERYY · AI 포토부스</p><h2 id="photo-title" tabindex="-1">강아지들 사이에<br><span class="accent">폭,</span> 파묻혀 볼까요?</h2><p class="sub">사진을 찍으면 8akeryy 화풍의 치비 캐릭터로 변신!<br>몽글몽글 강아지들 틈에 쏙 들어간 나를 만나보세요.</p>
+<div class="photobooth-grid"><div class="photo-examples" id="photo-examples"><figure><img src="../booth/assets/mock_preset.jpg" alt="잔디 위에서 손님을 기다리는 강아지 친구들"><figcaption>강아지들이 기다리는 자리</figcaption></figure><figure><img src="../booth/assets/mock_apply.jpg" alt="관람객이 캐릭터가 되어 강아지들 사이에 함께한 기존 AI 포토부스 예시"><figcaption>AI 변환 예시</figcaption></figure></div>
+<div class="photobooth-controls"><p id="photo-service" class="service-note" role="status">포토부스 연결을 확인하고 있어요.</p>
+<div class="photo-actions"><label class="secondary file-button">사진 선택<input id="photo-input" type="file" accept="image/*"></label><label class="secondary file-button">촬영하기<input id="camera-input" type="file" accept="image/*" capture="user"></label></div>
+<div id="photo-review" hidden><img id="photo-selected" alt="선택한 내 사진"><p class="hint">이 사진으로 강아지 친구들과 함께할게요.</p></div>
+<label class="consent"><input type="checkbox" id="photo-consent"><span>AI 사진 변환을 위해 선택한 사진이 전시 서버와 Google의 이미지 생성 서비스에 전송되는 데 동의해요. 사진을 공개 갤러리에 게시하지 않아요.</span></label>
+<button class="primary" id="generate-photo" disabled>AI 기념사진 만들기</button>
+<div id="photo-processing" hidden><span class="spinner" aria-hidden="true"></span><p>강아지들 사이로 폭, 파묻히는 중…</p><p class="hint">사진을 만드는 동안 이 화면에서 기다려주세요.</p><button class="text-button" id="cancel-photo">기다리기 취소</button></div>
+<p id="photo-status" role="status"></p><img id="photo-result" hidden alt="AI로 만든 나와 강아지 친구들의 기념사진"><button class="secondary" id="save-photo" hidden>기념사진 저장하기 ↓</button><button class="secondary" id="reset-photo">새 사진으로 시작하기</button><p class="hint">선택한 사진과 완성 사진은 이 탭을 떠나기 전에 저장해주세요.</p>
+</div></div><aside class="archive-invitation photo-archive-invitation"><div><p class="eyebrow">PHOTO ARCHIVE · 2026.08</p><h3>강아지들 사이, 그날의 손님들</h3><p>지난 전시에서 함께 남긴 AI 기념사진.<br>그날의 손님들을 만나보세요.</p><button type="button" class="secondary" onclick="location.href='photos/'">사진 아카이브 둘러보기 ↗</button></div><img src="../booth/assets/mock_apply.jpg" alt="" loading="lazy"></aside>
+</section></main></body></html>
