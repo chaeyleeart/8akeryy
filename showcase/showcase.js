@@ -85,7 +85,7 @@ function startGame(){
  $('game-load-status').textContent='친구를 만나러 가는 중… 0%';
  gameFrame=document.createElement('iframe');gameFrame.id='game-frame';gameFrame.title='8akeryy · 친구와 함께 보내는 하루';
  gameFrame.allow='autoplay; fullscreen';gameFrame.setAttribute('allowfullscreen','');
- gameFrame.src='game/index.html?v=lite-1080p-20261020';
+ gameFrame.src='game/index.html?v=lite-1080p-20261022';
  $('game-mount').append(gameFrame);
  gameTimer=setTimeout(()=>{
   $('game-error').hidden=false;

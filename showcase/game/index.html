@@ -6,10 +6,9 @@
   <title>YARR_1</title>
   <link rel="icon" href="data:,">
   <style>
-    /* 2026-10-07 웹판 — 창 크기에 맞춰 꽉 채운다. 비율은 게임이 직접 지키고(1920x1080 균등 배율),
-       남는 부분은 레터박스로 칠한다. 페이지 바깥은 검정. */
+    /* 캔버스를 화면 중앙에 배치하고 16:9 비율로 맞춘다. 남는 영역은 검정. */
     html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; touch-action: none; }
-    #unity-canvas { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; width: 100dvw; height: 100dvh; display: block; background: #000; outline: none; }
+    #unity-canvas { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); display: block; background: #000; outline: none; width: min(100vw, 100vh * 16 / 9); height: min(100vh, 100vw * 9 / 16); width: min(100dvw, 100dvh * 16 / 9); height: min(100dvh, 100dvw * 9 / 16); }
     #yarr-loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; color: #ccc; font: 500 16px sans-serif; background: #000; z-index: 3; }
     /* 폰을 세로로 들면 안내 — 웹은 화면 방향을 고정할 수 없다 */
     #yarr-rotate { display: none; position: fixed; inset: 0; background: #000; color: #fff; font: 600 20px sans-serif;
