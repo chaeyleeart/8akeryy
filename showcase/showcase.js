@@ -154,24 +154,30 @@ $('letter-form').addEventListener('submit',async event=>{
 $('edit-letter').addEventListener('click',()=>{if(state.receipt||state.wallReceipt){state.letterId=uuid();state.receipt=null;state.wallReceipt=null;$('letter-error').textContent='이미 남긴 편지는 유지돼요. 수정해서 붙이면 새 편지로 남아요.';}state.letterDone=false;persist();renderLetter();$('letter-message').focus({preventScroll:true});$('letter').scrollIntoView({block:'start'});});
 function clearLetter(){state.message='';state.destination=null;state.letterDone=false;state.receipt=null;state.wallReceipt=null;state.wallMode=null;state.letterId=uuid();lastPostedLetter=null;$('letter-form').reset();$('finished-message').textContent='';$('letter-storage-status').textContent='';$('letter-error').textContent='';$('letter-count').textContent='0 / 500';updateDestination();persist();}
 $('finish').addEventListener('click',()=>{clearLetter();$('letter').hidden=true;$('ending').hidden=false;document.body.dataset.stage='ending';focus('ending-title');$('experience').scrollIntoView({block:'start'});});
-function resetVisit(){if(letterBusy)return;stopGame();resetScene();$('bgm').pause();$('sound').setAttribute('aria-pressed','false');$('sound').textContent='소리 켜기 ♫';state=fresh();clearLetter();document.body.classList.remove('in-experience');$('experience').hidden=true;$('welcome').hidden=false;$('journey').hidden=false;$('start').textContent='베이커리 문 열기 →';window.scrollTo({top:0});$('start').focus({preventScroll:true});}
+function resetVisit(){if(letterBusy)return;if(archiveDialog.open)archiveDialog.close();stopGame();resetScene();$('bgm').pause();$('sound').setAttribute('aria-pressed','false');$('sound').textContent='소리 켜기 ♫';state=fresh();clearLetter();document.body.classList.remove('in-experience');$('experience').hidden=true;$('welcome').hidden=false;$('journey').hidden=false;$('start').textContent='베이커리 문 열기 →';window.scrollTo({top:0});$('start').focus({preventScroll:true});}
 $('restart').addEventListener('click',resetVisit);
 $('reset-visit').addEventListener('click',()=>{if(confirm('새 체험을 시작할까요? 이 기기의 설문과 작성한 편지가 비워져요. 벽에 공개한 편지는 남아요.'))resetVisit();});
-const archiveDialog=$('archive-dialog');let archiveTrigger=null,lastPostedLetter=null;
+const archiveDialog=$('archive-dialog'),archiveFrame=$('archive-frame');let archiveTrigger=null,lastPostedLetter=null;
 function openArchive(kind,button){
  archiveTrigger=button;persist();
  $('archive-title').textContent=kind==='photos'?'그날의 손님들 · 사진 아카이브':'남겨진 마음 · 편지 아카이브';
- const frame=$('archive-frame');frame.title=kind==='photos'?'지난 전시의 AI 기념사진':'함께 남긴 편지 벽';
- frame.dataset.kind=kind;frame.src=kind==='photos'?'photos/':`letters/?refresh=${Date.now()}${state.wallReceipt?'#'+state.wallReceipt:''}`;
+ archiveFrame.title=kind==='photos'?'지난 전시의 AI 기념사진':'함께 남긴 편지 벽';
+ archiveFrame.dataset.kind=kind;archiveFrame.src=kind==='photos'?'photos/':`letters/?refresh=${Date.now()}${state.wallReceipt?'#'+state.wallReceipt:''}`;
+ if(!archiveFrame.isConnected)archiveDialog.append(archiveFrame);
  archiveDialog.showModal();document.body.classList.add('archive-open');
 }
-$('archive-frame').addEventListener('load',()=>{const frame=$('archive-frame');if(frame.dataset.kind==='letters'&&lastPostedLetter)frame.contentWindow.postMessage({source:'8akeryy-showcase',type:'letter-posted',letter:lastPostedLetter},location.origin);});
+archiveFrame.addEventListener('load',()=>{if(archiveDialog.open&&archiveFrame.dataset.kind==='letters'&&lastPostedLetter)archiveFrame.contentWindow?.postMessage({source:'8akeryy-showcase',type:'letter-posted',letter:lastPostedLetter},location.origin);});
 document.querySelectorAll('[data-open-archive]').forEach(button=>button.addEventListener('click',()=>openArchive('letters',button)));
 document.querySelectorAll('[data-open-photos]').forEach(button=>button.addEventListener('click',()=>openArchive('photos',button)));
 $('close-archive').addEventListener('click',()=>archiveDialog.close());
-archiveDialog.addEventListener('close',()=>{document.body.classList.remove('archive-open');archiveTrigger?.focus({preventScroll:true});});
+archiveDialog.addEventListener('close',()=>{
+ if(archiveDialog.open)return;
+ archiveFrame.remove();
+ document.body.classList.remove('archive-open');
+ archiveTrigger?.focus({preventScroll:true});
+});
 window.addEventListener('message',event=>{
- if(event.origin===location.origin&&event.source===$('archive-frame').contentWindow&&event.data?.source==='8akeryy-archive'&&event.data.type==='close')archiveDialog.close();
+ if(archiveDialog.open&&event.origin===location.origin&&event.source===archiveFrame.contentWindow&&event.data?.source==='8akeryy-archive'&&event.data.type==='close')archiveDialog.close();
 });
 if(state.answers.length||state.introduced)$('start').textContent='우리의 하루 이어가기 →';
 window.addEventListener('pagehide',()=>{$('bgm').pause();$('scene-video').pause();clearLetter();});
